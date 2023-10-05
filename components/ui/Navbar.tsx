@@ -9,7 +9,7 @@ export default async function Navbar() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="m-8 flex justify-between">
+    <div className="flex justify-between">
       <Link href="/">
         <span className="font-bold">Lyft</span>
       </Link>

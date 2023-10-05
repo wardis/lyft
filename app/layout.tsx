@@ -18,12 +18,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="light">
-      <body className={inter.className}>
+    <html lang="en">
+      <body className={"min-h-screen bg-background " + inter.className}>
         <SupabaseProvider>
           <Providers>
-            <Navbar />
-            <main className="p-4">{children}</main>
+            <div className="relative flex flex-col h-screen">
+              <Navbar />
+              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+                {children}
+              </main>
+              <footer className="w-full flex items-center justify-center py-3">
+                <span className="text-default-600">
+                  Made with love by&nbsp;
+                </span>
+                <p className="text-primary"> Lyft</p>
+              </footer>
+            </div>
           </Providers>
         </SupabaseProvider>
       </body>
