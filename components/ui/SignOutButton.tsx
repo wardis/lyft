@@ -1,9 +1,10 @@
 "use client";
 
 import { useSupabase } from "@/app/supabase-provider";
+import { Button } from "@nextui-org/button";
 import { useRouter } from "next/navigation";
 
-export default function SignOutButton() {
+export default function SignOutButton(props: any) {
   const router = useRouter();
   const supabase = useSupabase();
 
@@ -12,5 +13,9 @@ export default function SignOutButton() {
     router.refresh();
   };
 
-  return <button onClick={handleSignOut}>Sign out</button>;
+  return (
+    <Button onClick={handleSignOut} {...props}>
+      Sign out
+    </Button>
+  );
 }

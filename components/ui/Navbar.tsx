@@ -1,6 +1,20 @@
+import {
+  Navbar as NextUINavbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
+} from "@nextui-org/navbar";
+import { Avatar } from "@nextui-org/avatar";
+import { Link } from "@nextui-org/link";
+
 import { createServerSupabaseClient } from "@/app/supabase-server";
 import SignOutButton from "./SignOutButton";
-import Link from "next/link";
+import NextLink from "next/link";
+import { siteConfig } from "@/config/site";
+import { Button } from "@nextui-org/button";
 
 export default async function Navbar() {
   const supabase = createServerSupabaseClient();
@@ -9,21 +23,43 @@ export default async function Navbar() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="flex justify-between">
-      <Link href="/">
-        <span className="font-bold">Lyft</span>
-      </Link>
+    <NextUINavbar maxWidth="xl" position="sticky">
+      <NavbarContent>
+        <NavbarBrand>
+          <NextLink href="/">
+            <span className="font-bold">Lyft</span>
+          </NextLink>
+        </NavbarBrand>
+      </NavbarContent>
 
-      <div className="flex">
+      <NavbarContent className="" justify="end">
         {user ? (
-          <div className="flex gap-3">
-            <span>Hi {user.email}</span>
-            <SignOutButton />
-          </div>
+          <Avatar isBordered color="primary" />
         ) : (
-          <Link href="signin">Sign In</Link>
+          <NextLink href="/signin">
+            <Button color="primary">Sign In</Button>
+          </NextLink>
         )}
-      </div>
-    </div>
+        <NavbarMenuToggle />
+      </NavbarContent>
+
+      <NavbarMenu>
+        <div className="mx-4 mt-2 flex flex-col gap-2 items-end">
+          {user && <p className="self-start">Hi {user.email}</p>}
+          {siteConfig.navMenuItems.map((item, index) => (
+            <NavbarMenuItem key={`${item}-${index}`}>
+              <Link color="foreground" href={item.href}>
+                {item.label}
+              </Link>
+            </NavbarMenuItem>
+          ))}
+          {user && (
+            <NavbarMenuItem>
+              <SignOutButton variant="light" color="primary" />
+            </NavbarMenuItem>
+          )}
+        </div>
+      </NavbarMenu>
+    </NextUINavbar>
   );
 }

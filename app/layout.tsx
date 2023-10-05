@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={"min-h-screen bg-background " + inter.className}>
+      <body className={"min-h-screen bg-background" + inter.className}>
         <SupabaseProvider>
           <Providers>
             <div className="relative flex flex-col h-screen">

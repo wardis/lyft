@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center space-between p-24 gap-24">
+    <section className="flex flex-col items-center gap-4 py-8 md:py-10">
       <h1>Lyft - Workout Tracker</h1>
       <Image
         src="/vercel.svg"
@@ -12,6 +12,6 @@ export default function Home() {
         height={24}
         priority
       />
-    </main>
+    </section>
   );
 }
