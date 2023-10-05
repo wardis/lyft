@@ -21,6 +21,11 @@ export default async function Navbar() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const { data: userData, error } = await supabase
+    .from("users")
+    .select("full_name, avatar_url")
+    .eq("id", user?.id ?? "")
+    .single();
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -34,7 +39,7 @@ export default async function Navbar() {
 
       <NavbarContent className="" justify="end">
         {user ? (
-          <Avatar isBordered color="primary" />
+          <Avatar isBordered color="primary" src={userData?.avatar_url ?? ""} />
         ) : (
           <NextLink href="/signin">
             <Button color="primary">Sign In</Button>
@@ -45,7 +50,11 @@ export default async function Navbar() {
 
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2 items-end">
-          {user && <p className="self-start">Hi {user.email}</p>}
+          {user && (
+            <p className="self-start">
+              Hi {userData?.full_name ?? user.email}!
+            </p>
+          )}
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link color="foreground" href={item.href}>
