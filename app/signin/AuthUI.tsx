@@ -12,7 +12,7 @@ export default function AuthUI() {
     <div>
       <Auth
         supabaseClient={supabase}
-        providers={[]}
+        providers={["facebook"]}
         redirectTo={`${getURL()}/auth/callback`}
         magicLink={true}
         appearance={{
