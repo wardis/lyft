@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/button";
+import { Button } from "@/components/ui/Button";
 import {
   Accordion,
   AccordionItem,
@@ -40,12 +40,12 @@ const userRoutines = [
 
 export default function Workout() {
   return (
-    <div>
+    <>
       <h1>Workout</h1>
 
       <div className="mt-4">
         <h2 className="mb-2">Quick Start</h2>
-        <Button>
+        <Button className="w-full">
           <BiPlus />
           Start Empty Workout
         </Button>
@@ -54,34 +54,34 @@ export default function Workout() {
       <div className="mt-4">
         <h2 className="mb-2">Routines</h2>
         <div className="flex gap-4">
-          <Button>
+          <Button className="flex-1">
             <HiOutlineClipboardList /> New Routine
           </Button>
-          <Button>
+          <Button className="flex-1">
             <BiSearch /> Explore
           </Button>
         </div>
       </div>
 
       <div className="mt-4">
-        <Accordion>
+        <Accordion isCompact>
           <AccordionItem title={"My Routines (" + userRoutines.length + ")"}>
             {userRoutines.map((routine) => (
-              <div key={routine.id} className="mb-4">
-                <Card>
-                  <CardHeader className="px-5">{routine.name}</CardHeader>
-                  <CardBody className="text-small py-0">
+              <div key={routine.id} className="mb-4 border rounded-lg p-4">
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-bold">{routine.name}</h3>
+                  <p className="text-small py-0 line-clamp-2">
                     {routine.description}
-                  </CardBody>
-                  <CardFooter>
+                  </p>
+                  <div>
                     <Button fullWidth>Start Routine</Button>
-                  </CardFooter>
-                </Card>
+                  </div>
+                </div>
               </div>
             ))}
           </AccordionItem>
         </Accordion>
       </div>
-    </div>
+    </>
   );
 }
