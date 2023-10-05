@@ -10,10 +10,19 @@ export default async function Navbar() {
 
   return (
     <div className="m-8 flex justify-between">
-      <span className="font-bold">Lyft</span>
+      <Link href="/">
+        <span className="font-bold">Lyft</span>
+      </Link>
 
       <div className="flex">
-        {user ? <SignOutButton /> : <Link href="signin">Sign In</Link>}
+        {user ? (
+          <div className="flex gap-3">
+            <span>Hi {user.email}</span>
+            <SignOutButton />
+          </div>
+        ) : (
+          <Link href="signin">Sign In</Link>
+        )}
       </div>
     </div>
   );
