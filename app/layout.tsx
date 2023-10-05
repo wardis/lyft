@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import SupabaseProvider from "./supabase-provider";
 import Navbar from "@/components/ui/Navbar";
+import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={inter.className}>
         <SupabaseProvider>
-          <Navbar />
-          <main>{children}</main>
+          <Providers>
+            <Navbar />
+            <main className="p-4">{children}</main>
+          </Providers>
         </SupabaseProvider>
       </body>
     </html>
