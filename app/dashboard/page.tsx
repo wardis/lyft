@@ -16,7 +16,7 @@ export default async function Dashboard() {
   return (
     <div>
       <div>Dashboard</div>
-      <div className="p-4">...list workouts you've done. feed.</div>
+      <div className="p-4">...list workouts feed.</div>
       <Button href="/workout" as={Link}>
         <BiDumbbell />
         Workout
