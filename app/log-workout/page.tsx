@@ -19,27 +19,59 @@ import { CgTimer } from "react-icons/cg";
 
 const mockExercises = [
   { id: 1, name: "Bench Press (Barbell)", sets: [] },
-  { id: 2, name: "Shoulder Press (Dumbell)", sets: [] },
+  {
+    id: 2,
+    name: "Shoulder Press (Dumbell)",
+    sets: [],
+    previousSet: { weight: 50, reps: 12 },
+  },
   { id: 3, name: "Front Squat", sets: [] },
   { id: 4, name: "Romanian Deadlift", sets: [] },
 ];
 
-const mockSet = { previous: "60kg * 12", weight: 70, reps: 12, done: false };
+const defaultSet = { weight: 0, reps: 0, done: false };
+
+const formatPreviousSet = ({
+  weight,
+  reps,
+}: {
+  weight: number;
+  reps: number;
+}) => `${weight}kg x ${reps}`;
 
 export default function LogWorkout() {
   const [exercises, setExercises] = useState<typeof mockExercises>([
     {
       id: 1,
       name: "Bench Press (Barbell)",
-      sets: [{ ...mockSet }],
+      sets: [{ ...defaultSet }],
     },
   ]);
+
+  console.clear();
+  console.table(exercises);
 
   const addExercise = () => {
     setExercises([
       ...exercises,
-      mockExercises[Math.floor(Math.random() * mockExercises.length)],
+      {
+        ...mockExercises[Math.floor(Math.random() * mockExercises.length)],
+        sets: [{ ...defaultSet }],
+      },
     ]);
+  };
+
+  const addSet = (exerciseIndex: number) => {
+    setExercises(
+      exercises.map((exercise, index) => {
+        if (index === exerciseIndex)
+          return {
+            ...exercise,
+            sets: [...exercise.sets, { ...defaultSet }],
+          };
+        else return { ...exercise };
+      })
+    );
   };
 
   return (
@@ -68,7 +100,7 @@ export default function LogWorkout() {
           <p>Add an exercise to start you workout</p>
         </div>
       ) : (
-        <div className="py-4 flex flex-col gap-4">
+        <div className="py-4 flex flex-col gap-8">
           {exercises.map((exercise, index) => (
             <div
               key={`${index}-${exercise.name}`}
@@ -90,7 +122,7 @@ export default function LogWorkout() {
                 <p className=" text-sm">Rest Timer: 35s</p>
               </div>
 
-              <Table removeWrapper>
+              <Table removeWrapper aria-label="sets">
                 <TableHeader>
                   <TableColumn className="uppercase">Set</TableColumn>
                   <TableColumn className="uppercase">Previous</TableColumn>
@@ -110,38 +142,71 @@ export default function LogWorkout() {
                     <TableRow key="1">
                       <TableCell>1</TableCell>
                       <TableCell className="text-default-300">
-                        70kg x 12
+                        {exercise.previousSet
+                          ? formatPreviousSet(exercise.previousSet)
+                          : "--"}
                       </TableCell>
-                      <TableCell>70</TableCell>
-                      <TableCell>12</TableCell>
+                      <TableCell>0</TableCell>
+                      <TableCell>0</TableCell>
                       <TableCell>
                         <Checkbox />
                       </TableCell>
                     </TableRow>
                   ) : (
-                    <TableRow key="1">
-                      <TableCell>1</TableCell>
-                      <TableCell className="text-default-300">
-                        70kg x 12
-                      </TableCell>
-                      <TableCell>70</TableCell>
-                      <TableCell>12</TableCell>
-                      <TableCell>
-                        <Checkbox />
-                      </TableCell>
-                    </TableRow>
+                    exercise.sets.map((set, index) => (
+                      <TableRow key={index + 1}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell className="text-default-300">
+                          {exercise.previousSet
+                            ? formatPreviousSet(exercise.previousSet)
+                            : "--"}
+                        </TableCell>
+                        <TableCell>
+                          {exercise.previousSet?.weight || 0}
+                        </TableCell>
+                        <TableCell>{exercise.previousSet?.reps || 0}</TableCell>
+                        <TableCell>
+                          <Checkbox />
+                        </TableCell>
+                      </TableRow>
+                    ))
                   )}
                 </TableBody>
               </Table>
+
+              <Button
+                size="sm"
+                className=" w-2/4 mx-auto"
+                onClick={() => {
+                  console.log(index);
+                  addSet(index);
+                }}
+              >
+                <BiPlus /> Add Set
+              </Button>
             </div>
           ))}
         </div>
       )}
-      <div className="pt-4">
-        <Button className="w-full" onClick={addExercise}>
+      <div className="pt-4 flex flex-col gap-4">
+        <Button
+          color="primary"
+          variant="solid"
+          className="w-full"
+          onClick={addExercise}
+        >
           <BiPlus />
           Add Exercise
         </Button>
+        <div className="flex gap-4">
+          <Button className="flex-1" onClick={() => {}}>
+            Settings
+          </Button>
+          <Button color="danger" className="flex-1" onClick={() => {}}>
+            <BiPlus />
+            Discard Workout
+          </Button>
+        </div>
       </div>
     </div>
   );
