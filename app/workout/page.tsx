@@ -1,13 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import {
-  Accordion,
-  AccordionItem,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-} from "@nextui-org/react";
+import { Accordion, AccordionItem, Link } from "@nextui-org/react";
 import { BiPlus, BiSearch } from "react-icons/bi";
 import { HiOutlineClipboardList } from "react-icons/hi";
 
@@ -40,12 +33,12 @@ const userRoutines = [
 
 export default function Workout() {
   return (
-    <>
+    <div>
       <h1>Workout</h1>
 
       <div className="mt-4">
         <h2 className="mb-2">Quick Start</h2>
-        <Button className="w-full">
+        <Button className="w-full" as={Link} href="/log-workout">
           <BiPlus />
           Start Empty Workout
         </Button>
@@ -63,9 +56,12 @@ export default function Workout() {
         </div>
       </div>
 
-      <div className="mt-4">
-        <Accordion isCompact>
-          <AccordionItem title={"My Routines (" + userRoutines.length + ")"}>
+      <div className="mt-4 mx-[-10px]">
+        <Accordion variant="light" isCompact>
+          <AccordionItem
+            title={<h2>{"My Routines (" + userRoutines.length + ")"}</h2>}
+            indicator="..."
+          >
             {userRoutines.map((routine) => (
               <div key={routine.id} className="mb-4 border rounded-lg p-4">
                 <div className="flex flex-col gap-2">
@@ -82,6 +78,6 @@ export default function Workout() {
           </AccordionItem>
         </Accordion>
       </div>
-    </>
+    </div>
   );
 }

@@ -31,6 +31,76 @@ export interface Database {
           }
         ]
       }
+      exercices: {
+        Row: {
+          created_at: string
+          id: number
+          name: string | null
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      exercise_target: {
+        Row: {
+          created_at: string
+          exercise_id: number
+          muscle_id: number
+        }
+        Insert: {
+          created_at?: string
+          exercise_id: number
+          muscle_id: number
+        }
+        Update: {
+          created_at?: string
+          exercise_id?: number
+          muscle_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_target_exercise_id_fkey"
+            columns: ["exercise_id"]
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_target_muscle_id_fkey"
+            columns: ["muscle_id"]
+            referencedRelation: "muscles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      muscles: {
+        Row: {
+          created_at: string
+          id: number
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Relationships: []
+      }
       prices: {
         Row: {
           active: boolean | null
@@ -106,6 +176,40 @@ export interface Database {
           name?: string | null
         }
         Relationships: []
+      }
+      routines: {
+        Row: {
+          author: string | null
+          created_at: string
+          description: string | null
+          exercices: number[] | null
+          id: number
+          name: string | null
+        }
+        Insert: {
+          author?: string | null
+          created_at?: string
+          description?: string | null
+          exercices?: number[] | null
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          author?: string | null
+          created_at?: string
+          description?: string | null
+          exercices?: number[] | null
+          id?: number
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "routines_author_fkey"
+            columns: ["author"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       subscriptions: {
         Row: {
