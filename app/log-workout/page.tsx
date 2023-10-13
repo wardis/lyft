@@ -16,17 +16,26 @@ import { useState } from "react";
 import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
 import { MdDone } from "react-icons/md";
 import { CgTimer } from "react-icons/cg";
+import { Link } from "@nextui-org/link";
+import { Input } from "@nextui-org/input";
+
+type Exercise = {
+  id: number;
+  name: string;
+};
+
+type Set = {
+  weight: number;
+  reps: number;
+  isDone: boolean;
+  exerciseIndex: number;
+};
 
 const mockExercises = [
-  { id: 1, name: "Bench Press (Barbell)", sets: [] },
-  {
-    id: 2,
-    name: "Shoulder Press (Dumbell)",
-    sets: [],
-    previousSet: { weight: 50, reps: 12 },
-  },
-  { id: 3, name: "Front Squat", sets: [] },
-  { id: 4, name: "Romanian Deadlift", sets: [] },
+  { id: 1, name: "Bench Press (Barbell)" },
+  { id: 2, name: "Shoulder Press (Dumbell)" },
+  { id: 3, name: "Front Squat" },
+  { id: 4, name: "Romanian Deadlift" },
 ];
 
 const defaultSet = { weight: 0, reps: 0, done: false };
@@ -40,58 +49,70 @@ const formatPreviousSet = ({
 }) => `${weight}kg x ${reps}`;
 
 export default function LogWorkout() {
-  const [exercises, setExercises] = useState<typeof mockExercises>([
-    {
-      id: 1,
-      name: "Bench Press (Barbell)",
-      sets: [{ ...defaultSet }],
-    },
-  ]);
-
-  console.clear();
-  console.table(exercises);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [sets, setSets] = useState<Set[]>([]);
 
   const addExercise = () => {
     setExercises([
       ...exercises,
       {
         ...mockExercises[Math.floor(Math.random() * mockExercises.length)],
-        sets: [{ ...defaultSet }],
+      },
+    ]);
+
+    const newExerciseIndex = exercises.length;
+    console.log(exercises, newExerciseIndex);
+    if (
+      sets.filter((set) => set.exerciseIndex === newExerciseIndex).length === 0
+    ) {
+      addSet(newExerciseIndex);
+    }
+  };
+
+  const addSet = (exerciseIndex: number) => {
+    setSets([
+      ...sets,
+      {
+        weight: 0,
+        reps: 0,
+        isDone: false,
+        exerciseIndex,
       },
     ]);
   };
 
-  const addSet = (exerciseIndex: number) => {
-    setExercises(
-      exercises.map((exercise, index) => {
-        if (index === exerciseIndex)
-          return {
-            ...exercise,
-            sets: [...exercise.sets, { ...defaultSet }],
-          };
-        else return { ...exercise };
-      })
-    );
-  };
-
   return (
     <div>
-      <h1>Log Workout</h1>
-      <div className="grid grid-cols-3 py-2">
-        <div>
-          <p>Duration</p>
-          <p>1h 13min 6s</p>
-        </div>
-        <div>
-          <p>Volume</p>
-          <p>0 kg</p>
-        </div>
-        <div>
-          <p>Sets</p>
-          <p>0</p>
-        </div>
+      <div className="flex justify-between items-center mb-3">
+        <h1>Log Workout</h1>
+        <Button
+          href="/workout"
+          size="sm"
+          variant="solid"
+          color="primary"
+          as={Link}
+          className=""
+        >
+          Finish
+        </Button>
       </div>
-      <Divider />
+      <div className="bg-background text-center">
+        <div className="grid grid-cols-3 py-2">
+          <div>
+            <p>Duration</p>
+            <p>1h 13min 6s</p>
+          </div>
+          <div>
+            <p>Volume</p>
+            <p>0 kg</p>
+          </div>
+          <div>
+            <p>Sets</p>
+            <p>0</p>
+          </div>
+        </div>
+        <Divider />
+      </div>
 
       {exercises.length === 0 ? (
         <div className="py-4 flex flex-col items-center">
@@ -107,22 +128,42 @@ export default function LogWorkout() {
               className="flex-col gap-2 flex"
             >
               <div className="flex items-center gap-2 justify-start">
-                <Avatar size="sm" name={exercise.name} />
-                <p className="text-primary flex-grow">{exercise.name}</p>
+                <Avatar
+                  size="sm"
+                  src="/assets/dumbbell.svg"
+                  style={{ padding: "4px" }}
+                />
+                <p className="text-primary flex-grow">
+                  {exercise.name} {index}
+                </p>
                 <BiDotsVertical className="text-primary" size="24" />
               </div>
 
-              <input
+              <Input
+                size="sm"
+                variant="flat"
+                classNames={{
+                  inputWrapper: "bg-transparent shadow-none w-full text-sm",
+                }}
                 placeholder="Add notes here..."
-                className="bg-transparent w-full text-sm"
               />
 
               <div className="text-primary flex items-center gap-2">
-                <CgTimer />
-                <p className=" text-sm">Rest Timer: 35s</p>
+                <Button color="primary" variant="light">
+                  <CgTimer size={24} />
+                  Rest Timer: 35s
+                </Button>
               </div>
 
-              <Table removeWrapper aria-label="sets">
+              <Table
+                removeWrapper
+                aria-label="sets"
+                isCompact
+                classNames={{
+                  base: "text-center",
+                  th: "bg-transparent text-center",
+                }}
+              >
                 <TableHeader>
                   <TableColumn className="uppercase">Set</TableColumn>
                   <TableColumn className="uppercase">Previous</TableColumn>
@@ -138,39 +179,52 @@ export default function LogWorkout() {
                   </TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {exercise.sets.length === 0 ? (
-                    <TableRow key="1">
-                      <TableCell>1</TableCell>
-                      <TableCell className="text-default-300">
-                        {exercise.previousSet
-                          ? formatPreviousSet(exercise.previousSet)
-                          : "--"}
-                      </TableCell>
-                      <TableCell>0</TableCell>
-                      <TableCell>0</TableCell>
-                      <TableCell>
-                        <Checkbox />
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    exercise.sets.map((set, index) => (
+                  {sets
+                    .filter((set) => set.exerciseIndex === index)
+                    .map((set, index) => (
                       <TableRow key={index + 1}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell className="text-default-300">
+                        <TableCell>
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            className=""
+                            onClick={() => {
+                              alert("Remove set ?");
+                            }}
+                          >
+                            {index + 1}
+                          </Button>
+                        </TableCell>
+                        <TableCell className="text-default-300 w-2/6">
                           {exercise.previousSet
                             ? formatPreviousSet(exercise.previousSet)
                             : "--"}
                         </TableCell>
                         <TableCell>
-                          {exercise.previousSet?.weight || 0}
+                          <Input
+                            size="sm"
+                            variant="flat"
+                            classNames={{
+                              inputWrapper: "bg-transparent shadow-none",
+                            }}
+                            placeholder={exercise.previousSet?.weight || 0}
+                          />
                         </TableCell>
-                        <TableCell>{exercise.previousSet?.reps || 0}</TableCell>
+                        <TableCell>
+                          <Input
+                            size="sm"
+                            classNames={{
+                              inputWrapper: "bg-transparent shadow-none",
+                            }}
+                            placeholder={exercise.previousSet?.reps || 0}
+                          />
+                        </TableCell>
                         <TableCell>
                           <Checkbox />
                         </TableCell>
                       </TableRow>
-                    ))
-                  )}
+                    ))}
                 </TableBody>
               </Table>
 
