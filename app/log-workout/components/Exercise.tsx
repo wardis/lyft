@@ -20,8 +20,8 @@ import { Input } from "@nextui-org/input";
 
 type Set = {
   position: number;
-  weight?: number;
-  reps?: number;
+  weight?: string;
+  reps?: string;
   isDone: boolean;
 };
 
@@ -44,6 +44,14 @@ const columns = [
   { name: "REPS", uid: "reps" },
   { name: <MdDone />, uid: "done" },
 ];
+
+const formatPreviousSet = ({
+  weight,
+  reps,
+}: {
+  weight: string;
+  reps: string;
+}) => `${weight}kg x ${reps}`;
 
 export default function Exercise({ exercise }: Props) {
   const [sets, setSets] = useState<Set[]>([
@@ -71,7 +79,7 @@ export default function Exercise({ exercise }: Props) {
     );
   };
 
-  const changeWeight = (position, value) => {
+  const changeWeight = (position: number, value: string) => {
     setSets((oldSets) =>
       oldSets.map((set) => {
         if (set.position === position) {
@@ -81,7 +89,7 @@ export default function Exercise({ exercise }: Props) {
       })
     );
   };
-  const changeReps = (position, value) => {
+  const changeReps = (position: number, value: string) => {
     setSets((oldSets) =>
       oldSets.map((set) => {
         if (set.position === position) {
@@ -91,7 +99,7 @@ export default function Exercise({ exercise }: Props) {
       })
     );
   };
-  const changeDone = (position, value) => {
+  const changeDone = (position: number, value: boolean) => {
     setSets((oldSets) =>
       oldSets.map((set) => {
         if (set.position === position) {
@@ -130,9 +138,9 @@ export default function Exercise({ exercise }: Props) {
             classNames={{
               inputWrapper: "bg-transparent shadow-none",
             }}
-            placeholder={set.previousWeight ?? "0"}
-            value={set.weight}
-            onChange={(e) => changeWeight(set.position, Number(e.target.value))}
+            placeholder={exercise.previousSet?.weight ?? "0"}
+            value={set.weight ?? ""}
+            onChange={(e) => changeWeight(set.position, e.target.value)}
           />
         );
       case "reps":
@@ -143,9 +151,9 @@ export default function Exercise({ exercise }: Props) {
               inputWrapper: "bg-transparent shadow-none",
             }}
             type="number"
-            placeholder={set.previousReps ?? "0"}
-            value={set.reps}
-            onChange={(e) => changeReps(set.position, Number(e.target.value))}
+            placeholder={exercise.previousSet?.reps ?? "0"}
+            value={set.reps ?? ""}
+            onChange={(e) => changeReps(set.position, e.target.value)}
           />
         );
       case "done":

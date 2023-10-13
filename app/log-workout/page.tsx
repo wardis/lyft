@@ -16,17 +16,9 @@ type Exercise = {
 const mockExercises = [
   { id: 1, name: "Bench Press (Barbell)" },
   { id: 2, name: "Shoulder Press (Dumbell)" },
-  { id: 3, name: "Front Squat" },
+  { id: 3, name: "Front Squat", previousSet: { weight: 150, reps: 14 } },
   { id: 4, name: "Romanian Deadlift" },
 ];
-
-const formatPreviousSet = ({
-  weight,
-  reps,
-}: {
-  weight: number;
-  reps: number;
-}) => `${weight}kg x ${reps}`;
 
 export default function LogWorkout() {
   const [exercises, setExercises] = useState<Exercise[]>([mockExercises[0]]);
