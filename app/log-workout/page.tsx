@@ -14,9 +14,9 @@ type Exercise = {
 };
 
 const mockExercises = [
-  { id: 1, name: "Bench Press (Barbell)" },
-  { id: 2, name: "Shoulder Press (Dumbell)" },
-  { id: 3, name: "Front Squat", previousSet: { weight: 150, reps: 14 } },
+  { id: 1, name: "Front Squat", previousSet: { weight: 150, reps: 14 } },
+  { id: 2, name: "Bench Press (Barbell)" },
+  { id: 3, name: "Shoulder Press (Dumbell)" },
   { id: 4, name: "Romanian Deadlift" },
 ];
 

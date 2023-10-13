@@ -40,18 +40,14 @@ const columns = [
       </div>
     ),
     uid: "weight",
+    large: true,
   },
   { name: "REPS", uid: "reps" },
   { name: <MdDone />, uid: "done" },
 ];
 
-const formatPreviousSet = ({
-  weight,
-  reps,
-}: {
-  weight: string;
-  reps: string;
-}) => `${weight}kg x ${reps}`;
+const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
+  weight && reps ? `${weight}kg x ${reps}` : null;
 
 export default function Exercise({ exercise }: Props) {
   const [sets, setSets] = useState<Set[]>([
@@ -129,7 +125,11 @@ export default function Exercise({ exercise }: Props) {
           </Button>
         );
       case "previous":
-        return "--";
+        return (
+          <p className=" text-gray-400">
+            {formatPreviousSet(exercise.previousSet) ?? "-"}
+          </p>
+        );
       case "weight":
         return (
           <Input
