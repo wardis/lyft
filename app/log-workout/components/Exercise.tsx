@@ -3,8 +3,16 @@
 import React, { useState, useId } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { Button as NextUIButton } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Avatar } from "@nextui-org/avatar";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownSection,
+} from "@nextui-org/dropdown";
 import {
   Table,
   TableHeader,
@@ -14,7 +22,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
-import { MdDone } from "react-icons/md";
+import { MdDelete, MdDeleteOutline, MdDone } from "react-icons/md";
 import { CgTimer } from "react-icons/cg";
 import { Input } from "@nextui-org/input";
 
@@ -23,10 +31,20 @@ type Set = {
   weight?: string;
   reps?: string;
   isDone: boolean;
+  type?: "normal" | "warmup" | "failure" | "drop";
 };
 
 type Props = {
   exercise: any;
+};
+
+const setTypeMap = {
+  normal: (position: string) => (
+    <p className="font-bold w-5 text-center">{position}</p>
+  ),
+  warmup: <p className="text-warning font-bold w-5 text-center">W</p>,
+  failure: <p className="text-danger font-bold w-5 text-center">F</p>,
+  drop: <p className=" text-cyan-500 font-bold w-5 text-center">D</p>,
 };
 
 const columns = [
@@ -105,6 +123,16 @@ export default function Exercise({ exercise }: Props) {
       })
     );
   };
+  const changeType = (position: number, value: Set["type"]) => {
+    setSets((oldSets) =>
+      oldSets.map((set) => {
+        if (set.position === position) {
+          return { ...set, type: value };
+        }
+        return set;
+      })
+    );
+  };
 
   const renderCell = (set: Set, columnKey: React.Key) => {
     const cellValue = set[columnKey as keyof Set];
@@ -112,17 +140,59 @@ export default function Exercise({ exercise }: Props) {
     switch (columnKey) {
       case "set":
         return (
-          <Button
-            isIconOnly
-            size="sm"
-            variant="light"
-            className=""
-            onClick={() => {
-              deleteSet(set.position);
-            }}
-          >
-            {set.position}
-          </Button>
+          <Dropdown backdrop="blur">
+            <DropdownTrigger>
+              <NextUIButton isIconOnly size="sm" variant="light">
+                {!["drop", "failure", "warmup"].includes(set.type)
+                  ? setTypeMap["normal"](String(set.position))
+                  : setTypeMap[set.type]}
+              </NextUIButton>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Set action menu"
+              onAction={(key) => {
+                if (key === "delete") return deleteSet(set.position);
+                changeType(set.position, key as Set["type"]);
+                // setSets(
+                //   sets.map((prevSet) => {
+                //     if (prevSet.position === set.position)
+                //       return { ...prevSet, type: key as Set["type"] };
+                //     return prevSet;
+                //   })
+                // );
+              }}
+            >
+              <DropdownSection
+                title="Select set type"
+                classNames={{ heading: "text-center" }}
+              >
+                <DropdownItem key="warmup" startContent={setTypeMap["warmup"]}>
+                  Warm Up Set
+                </DropdownItem>
+                <DropdownItem
+                  key="normal"
+                  startContent={setTypeMap["normal"]("1")}
+                >
+                  Normal Set
+                </DropdownItem>
+                <DropdownItem
+                  key="failure"
+                  startContent={setTypeMap["failure"]}
+                >
+                  Failure Set
+                </DropdownItem>
+                <DropdownItem key="drop" startContent={setTypeMap["drop"]}>
+                  Drop Set
+                </DropdownItem>
+                <DropdownItem
+                  key="delete"
+                  startContent={<MdDeleteOutline size="1.2rem" />}
+                >
+                  Remove Set
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
         );
       case "previous":
         return (
@@ -196,30 +266,32 @@ export default function Exercise({ exercise }: Props) {
         </Button>
       </div>
 
-      <Table
-        removeWrapper
-        aria-label="sets"
-        isCompact
-        classNames={{
-          base: "text-center",
-          th: "bg-transparent text-center",
-        }}
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={sets}>
-          {(set) => (
-            <TableRow key={set.position}>
-              {(columnKey) => (
-                <TableCell>{renderCell(set, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <div className=" relative">
+        <Table
+          removeWrapper
+          aria-label="sets"
+          isCompact
+          classNames={{
+            base: "text-center",
+            th: "bg-transparent text-center",
+          }}
+        >
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={sets}>
+            {(set) => (
+              <TableRow key={set.position}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(set, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
       <Button
         size="sm"

@@ -30,9 +30,12 @@ export default function LogWorkout() {
     const fetchExercises = async () => {
       const exercises = await fetch("/api/exercises");
       const { data } = await exercises.json();
-      setAllExercises(data);
+      return data;
     };
-    fetchExercises();
+    fetchExercises().then((exercises) => {
+      setAllExercises(exercises);
+      setWorkoutExercises([exercises[0], exercises[1]]); // TODO: remove after testing
+    });
   }, []);
 
   return (
