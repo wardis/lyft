@@ -5,32 +5,35 @@ import { Divider } from "@nextui-org/divider";
 import { BiDumbbell, BiPlus } from "react-icons/bi";
 
 import { Link } from "@nextui-org/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Exercise from "./components/Exercise";
+import AddExercise from "./components/AddExercise";
 
 type Exercise = {
   id: number;
   name: string;
 };
 
-const mockExercises = [
-  { id: 1, name: "Front Squat", previousSet: { weight: 150, reps: 14 } },
-  { id: 2, name: "Bench Press (Barbell)" },
-  { id: 3, name: "Shoulder Press (Dumbell)" },
-  { id: 4, name: "Romanian Deadlift" },
-];
-
 export default function LogWorkout() {
-  const [exercises, setExercises] = useState<Exercise[]>([mockExercises[0]]);
+  const [allExercises, setAllExercises] = useState<Exercise[]>([]);
+  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
 
-  const addExercise = () => {
-    setExercises([
-      ...exercises,
-      {
-        ...mockExercises[Math.floor(Math.random() * mockExercises.length)],
-      },
+  const addExercises = (list: string[]) => {
+    const intIds = list.map((id) => parseInt(id));
+    setWorkoutExercises((oldWorkoutExercises) => [
+      ...oldWorkoutExercises,
+      ...allExercises.filter((exercise) => intIds.includes(exercise.id)),
     ]);
   };
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      const exercises = await fetch("/api/exercises");
+      const { data } = await exercises.json();
+      setAllExercises(data);
+    };
+    fetchExercises();
+  }, []);
 
   return (
     <div>
@@ -65,7 +68,7 @@ export default function LogWorkout() {
         <Divider />
       </div>
 
-      {exercises.length === 0 ? (
+      {workoutExercises.length === 0 ? (
         <div className="py-4 flex flex-col items-center">
           <BiDumbbell size={32} />
           <h2 className="font-bold">Get started</h2>
@@ -73,21 +76,13 @@ export default function LogWorkout() {
         </div>
       ) : (
         <div className="py-4 flex flex-col gap-8">
-          {exercises.map((exercise, index) => (
+          {workoutExercises.map((exercise, index) => (
             <Exercise key={`${index}-${exercise.name}`} exercise={exercise} />
           ))}
         </div>
       )}
       <div className="pt-4 flex flex-col gap-4">
-        <Button
-          color="primary"
-          variant="solid"
-          className="w-full"
-          onClick={addExercise}
-        >
-          <BiPlus />
-          Add Exercise
-        </Button>
+        <AddExercise exercises={allExercises} onSubmit={addExercises} />
         <div className="flex gap-4">
           <Button className="flex-1" onClick={() => {}}>
             Settings
