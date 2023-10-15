@@ -17,15 +17,19 @@ type Exercise = {
 
 export default function LogWorkout() {
   const [allExercises, setAllExercises] = useState<Exercise[]>([]);
-  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
+  const [workoutExercises, setWorkoutExercises] = useState<
+    (Exercise & {
+      volume?: number;
+    })[]
+  >([]);
+  const workoutVolumes = workoutExercises.map(
+    (exercise) => 0 + parseInt(exercise.volume)
+  );
 
-  const addExercises = (list: string[]) => {
-    const intIds = list.map((id) => parseInt(id));
-    setWorkoutExercises((oldWorkoutExercises) => [
-      ...oldWorkoutExercises,
-      ...allExercises.filter((exercise) => intIds.includes(exercise.id)),
-    ]);
-  };
+  const workoutVolume = workoutExercises.reduce(
+    (total, exercise) => total + (exercise.volume ?? 0),
+    0
+  );
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -35,9 +39,33 @@ export default function LogWorkout() {
     };
     fetchExercises().then((exercises) => {
       setAllExercises(exercises);
-      setWorkoutExercises([exercises[0], exercises[1]]); // TODO: remove after testing
+      setWorkoutExercises([
+        { ...exercises[0], volume: 0 },
+        { ...exercises[1], volume: 0 },
+      ]); // TODO: remove after testing
     });
   }, []);
+
+  const addExercises = (list: string[]) => {
+    const intIds = list.map((id) => parseInt(id));
+    setWorkoutExercises((oldWorkoutExercises) => [
+      ...oldWorkoutExercises,
+      ...allExercises.filter((exercise) => intIds.includes(exercise.id)),
+    ]);
+  };
+
+  const updateExerciseVolume = (exerciseIndex, value) => {
+    setWorkoutExercises((oldWorkoutExercises) =>
+      oldWorkoutExercises.map((exercise, index) => {
+        if (index === exerciseIndex)
+          return {
+            ...exercise,
+            volume: value,
+          };
+        return exercise;
+      })
+    );
+  };
 
   return (
     <div>
@@ -62,7 +90,7 @@ export default function LogWorkout() {
           </div>
           <div>
             <p>Volume</p>
-            <p>0 kg</p>
+            <p>{workoutVolume} kg</p>
           </div>
           <div>
             <p>Sets</p>
@@ -80,8 +108,15 @@ export default function LogWorkout() {
         </div>
       ) : (
         <div className="py-4 flex flex-col gap-8">
+          <p>{workoutVolumes.join(", ")}</p>
           {workoutExercises.map((exercise, index) => (
-            <Exercise key={`${index}-${exercise.name}`} exercise={exercise} />
+            <Exercise
+              key={`${index}-${exercise.name}`}
+              exercise={exercise}
+              onVolumeUpdate={(exerciseVolume) =>
+                updateExerciseVolume(index, exerciseVolume)
+              }
+            />
           ))}
         </div>
       )}

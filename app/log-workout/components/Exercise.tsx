@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { Button as NextUIButton } from "@nextui-org/button";
@@ -34,10 +34,6 @@ type Set = {
   type?: "normal" | "warmup" | "failure" | "drop";
 };
 
-type Props = {
-  exercise: any;
-};
-
 const setTypeMap = {
   normal: (position: string) => (
     <p className="font-bold w-5 text-center">{position}</p>
@@ -64,16 +60,29 @@ const columns = [
   { name: <MdDone />, uid: "done" },
 ];
 
+type Props = {
+  exercise: any;
+  onVolumeUpdate: (volume: number) => void;
+};
+
 const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
   weight && reps ? `${weight}kg x ${reps}` : null;
 
-export default function Exercise({ exercise }: Props) {
+export default function Exercise({ exercise, onVolumeUpdate }: Props) {
   const [sets, setSets] = useState<Set[]>([
     {
       position: 1,
       isDone: false,
     },
   ]);
+
+  const volume = sets.reduce((total, set) => {
+    if (set.isDone) {
+      return total + parseInt(set.weight) * parseInt(set.reps);
+    }
+    return total;
+  }, 0);
+  useEffect(() => onVolumeUpdate(volume), [volume, onVolumeUpdate]);
 
   const addSet = () => {
     setSets([
@@ -153,13 +162,6 @@ export default function Exercise({ exercise }: Props) {
               onAction={(key) => {
                 if (key === "delete") return deleteSet(set.position);
                 changeType(set.position, key as Set["type"]);
-                // setSets(
-                //   sets.map((prevSet) => {
-                //     if (prevSet.position === set.position)
-                //       return { ...prevSet, type: key as Set["type"] };
-                //     return prevSet;
-                //   })
-                // );
               }}
             >
               <DropdownSection
@@ -240,6 +242,7 @@ export default function Exercise({ exercise }: Props) {
 
   return (
     <div className="flex-col gap-2 flex">
+      <p>volume: {volume}</p>
       <div className="flex items-center gap-2 justify-start">
         <Avatar
           size="sm"
