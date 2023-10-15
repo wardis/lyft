@@ -75,6 +75,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
       isDone: false,
     },
   ]);
+  const [notes, setNotes] = useState(exercise.notes ?? "");
 
   const exerciseMeta = sets.reduce(
     (acc, set) => {
@@ -88,7 +89,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
     },
     { volume: 0, sets: 0 }
   );
-  useEffect(() => onMetaUpdate(exerciseMeta), [exerciseMeta]);
+  useEffect(() => onMetaUpdate({ ...exerciseMeta, notes }), [exerciseMeta]);
 
   const addSet = () => {
     setSets([
@@ -252,7 +253,6 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
 
   return (
     <div className="flex-col gap-2 flex">
-      <p>volume: {exerciseMeta.volume}</p>
       <div className="flex items-center gap-2 justify-start">
         <Avatar
           size="sm"
@@ -269,6 +269,8 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
         classNames={{
           inputWrapper: "bg-transparent shadow-none w-full text-sm",
         }}
+        value={exercise.notes}
+        onChange={(e) => setNotes(e.target.value)}
         placeholder="Add notes here..."
       />
 

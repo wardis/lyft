@@ -15,13 +15,17 @@ type Exercise = {
   name: string;
 };
 
+type WorkoutExercise = Exercise & {
+  volume: number;
+  sets: number;
+  notes?: string;
+};
+
 export default function LogWorkout() {
   const [allExercises, setAllExercises] = useState<Exercise[]>([]);
-  const [workoutExercises, setWorkoutExercises] = useState<
-    (Exercise & {
-      volume?: number;
-    })[]
-  >([]);
+  const [workoutExercises, setWorkoutExercises] = useState<WorkoutExercise[]>(
+    []
+  );
 
   const workoutVolume = workoutExercises.reduce(
     (total, exercise) => total + (exercise.volume ?? 0),
@@ -41,8 +45,8 @@ export default function LogWorkout() {
     fetchExercises().then((exercises) => {
       setAllExercises(exercises);
       setWorkoutExercises([
-        { ...exercises[0], volume: 0, sets: 0 },
-        { ...exercises[1], volume: 0, sets: 0 },
+        { ...exercises[0], volume: 0, sets: 0, notes: "" },
+        { ...exercises[1], volume: 0, sets: 0, notes: "" },
       ]); // TODO: remove after testing
     });
   }, []);
@@ -51,11 +55,16 @@ export default function LogWorkout() {
     const intIds = list.map((id) => parseInt(id));
     setWorkoutExercises((oldWorkoutExercises) => [
       ...oldWorkoutExercises,
-      ...allExercises.filter((exercise) => intIds.includes(exercise.id)),
+      ...allExercises
+        .filter((exercise) => intIds.includes(exercise.id))
+        .map((exercise) => ({ ...exercise, notes: "", volume: 0, sets: 0 })),
     ]);
   };
 
-  const updateExerciseMeta = (exerciseIndex, meta) => {
+  const updateExerciseMeta = (
+    exerciseIndex: number,
+    meta: { volume: number; sets: number; notes: string }
+  ) => {
     setWorkoutExercises((oldWorkoutExercises) =>
       oldWorkoutExercises.map((exercise, index) => {
         if (index === exerciseIndex)
@@ -63,6 +72,7 @@ export default function LogWorkout() {
             ...exercise,
             volume: meta.volume,
             sets: meta.sets,
+            notes: meta.notes,
           };
         return exercise;
       })
@@ -114,9 +124,7 @@ export default function LogWorkout() {
             <Exercise
               key={`${index}-${exercise.name}`}
               exercise={exercise}
-              onMetaUpdate={(exerciseVolume) =>
-                updateExerciseMeta(index, exerciseVolume)
-              }
+              onMetaUpdate={(meta) => updateExerciseMeta(index, meta)}
             />
           ))}
         </div>
