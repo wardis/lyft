@@ -88,7 +88,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
     },
     { volume: 0, sets: 0 }
   );
-  useEffect(() => onMetaUpdate(exerciseMeta), [exerciseMeta, onMetaUpdate]);
+  useEffect(() => onMetaUpdate(exerciseMeta), [exerciseMeta]);
 
   const addSet = () => {
     setSets([
@@ -132,7 +132,12 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
     setSets((oldSets) =>
       oldSets.map((set) => {
         if (set.position === position) {
-          return { ...set, isDone: value };
+          return {
+            ...set,
+            weight: set.weight ?? "0",
+            reps: set.reps ?? "0",
+            isDone: value,
+          };
         }
         return set;
       })
@@ -228,7 +233,6 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
             classNames={{
               inputWrapper: "bg-transparent shadow-none",
             }}
-            type="number"
             placeholder={exercise.previousSet?.reps ?? "0"}
             value={set.reps ?? ""}
             onChange={(e) => changeReps(set.position, e.target.value)}
