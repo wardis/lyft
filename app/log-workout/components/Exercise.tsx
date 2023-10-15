@@ -263,7 +263,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
         <p className="text-primary flex-grow">{exercise.name}</p>
         <BiDotsVertical className="text-primary" size="24" />
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-10 gap-2">
         <RestTimer
           restDuration={restDuration}
           setRestDuration={setRestDuration}
@@ -271,7 +271,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
         <Input
           size="sm"
           variant="flat"
-          className="col-span-2  border"
+          className="col-span-7"
           classNames={{
             inputWrapper: "bg-transparent shadow-none w-full text-sm h-[3rem]",
           }}

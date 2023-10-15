@@ -28,7 +28,7 @@ export default function RestTimer({ restDuration, setRestDuration }: Props) {
   return (
     <>
       <Select
-        className="text-primary h-3"
+        className="text-primary h-3 col-span-3"
         startContent={<CgTimer size={24} />}
         label="Rest timer"
         placeholder="Duration"
