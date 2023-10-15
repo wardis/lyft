@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useId } from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { Button as NextUIButton } from "@nextui-org/button";
@@ -22,7 +22,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
-import { MdDelete, MdDeleteOutline, MdDone } from "react-icons/md";
+import { MdDeleteOutline, MdDone } from "react-icons/md";
 import { CgTimer } from "react-icons/cg";
 import { Input } from "@nextui-org/input";
 

@@ -8,6 +8,7 @@ import { Link } from "@nextui-org/link";
 import { useEffect, useState } from "react";
 import Exercise from "./components/Exercise";
 import AddExercise from "./components/AddExercise";
+import WorkoutDuration from "./components/WorkoutDuration";
 
 type Exercise = {
   id: number;
@@ -53,11 +54,11 @@ export default function LogWorkout() {
           Finish
         </Button>
       </div>
-      <div className="bg-background text-center">
+      <div className="bg-background ">
         <div className="grid grid-cols-3 py-2">
           <div>
             <p>Duration</p>
-            <p>1h 13min 6s</p>
+            <WorkoutDuration />
           </div>
           <div>
             <p>Volume</p>
