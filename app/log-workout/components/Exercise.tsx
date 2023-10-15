@@ -23,10 +23,10 @@ import {
 } from "@nextui-org/table";
 import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
 import { MdDeleteOutline, MdDone } from "react-icons/md";
-import { CgTimer } from "react-icons/cg";
 import { Input } from "@nextui-org/input";
+import RestTimer from "./RestTimer";
 
-type Set = {
+type ExerciseSet = {
   position: number;
   weight?: string;
   reps?: string;
@@ -69,13 +69,14 @@ const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
   weight && reps ? `${weight}kg x ${reps}` : null;
 
 export default function Exercise({ exercise, onMetaUpdate }: Props) {
-  const [sets, setSets] = useState<Set[]>([
+  const [sets, setSets] = useState<ExerciseSet[]>([
     {
       position: 1,
       isDone: false,
     },
   ]);
   const [notes, setNotes] = useState(exercise.notes ?? "");
+  const [restDuration, setRestDuration] = useState<Selection>(new Set([]));
 
   const exerciseMeta = sets.reduce(
     (acc, set) => {
@@ -144,7 +145,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
       })
     );
   };
-  const changeType = (position: number, value: Set["type"]) => {
+  const changeType = (position: number, value: ExerciseSet["type"]) => {
     setSets((oldSets) =>
       oldSets.map((set) => {
         if (set.position === position) {
@@ -155,8 +156,8 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
     );
   };
 
-  const renderCell = (set: Set, columnKey: React.Key) => {
-    const cellValue = set[columnKey as keyof Set];
+  const renderCell = (set: ExerciseSet, columnKey: React.Key) => {
+    const cellValue = set[columnKey as keyof ExerciseSet];
 
     switch (columnKey) {
       case "set":
@@ -173,7 +174,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
               aria-label="Set action menu"
               onAction={(key) => {
                 if (key === "delete") return deleteSet(set.position);
-                changeType(set.position, key as Set["type"]);
+                changeType(set.position, key as ExerciseSet["type"]);
               }}
             >
               <DropdownSection
@@ -262,23 +263,22 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
         <p className="text-primary flex-grow">{exercise.name}</p>
         <BiDotsVertical className="text-primary" size="24" />
       </div>
-
-      <Input
-        size="sm"
-        variant="flat"
-        classNames={{
-          inputWrapper: "bg-transparent shadow-none w-full text-sm",
-        }}
-        value={exercise.notes}
-        onChange={(e) => setNotes(e.target.value)}
-        placeholder="Add notes here..."
-      />
-
-      <div className="text-primary flex items-center gap-2">
-        <Button color="primary" variant="light">
-          <CgTimer size={24} />
-          Rest Timer: 35s
-        </Button>
+      <div className="grid grid-cols-3 gap-2">
+        <RestTimer
+          restDuration={restDuration}
+          setRestDuration={setRestDuration}
+        />
+        <Input
+          size="sm"
+          variant="flat"
+          className="col-span-2  border"
+          classNames={{
+            inputWrapper: "bg-transparent shadow-none w-full text-sm h-[3rem]",
+          }}
+          value={exercise.notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Add notes here..."
+        />
       </div>
 
       <div className=" relative">
