@@ -22,12 +22,13 @@ export default function LogWorkout() {
       volume?: number;
     })[]
   >([]);
-  const workoutVolumes = workoutExercises.map(
-    (exercise) => 0 + parseInt(exercise.volume)
-  );
 
   const workoutVolume = workoutExercises.reduce(
     (total, exercise) => total + (exercise.volume ?? 0),
+    0
+  );
+  const workoutSets = workoutExercises.reduce(
+    (total, exercise) => total + (exercise.sets ?? 0),
     0
   );
 
@@ -40,8 +41,8 @@ export default function LogWorkout() {
     fetchExercises().then((exercises) => {
       setAllExercises(exercises);
       setWorkoutExercises([
-        { ...exercises[0], volume: 0 },
-        { ...exercises[1], volume: 0 },
+        { ...exercises[0], volume: 0, sets: 0 },
+        { ...exercises[1], volume: 0, sets: 0 },
       ]); // TODO: remove after testing
     });
   }, []);
@@ -54,13 +55,14 @@ export default function LogWorkout() {
     ]);
   };
 
-  const updateExerciseVolume = (exerciseIndex, value) => {
+  const updateExerciseMeta = (exerciseIndex, meta) => {
     setWorkoutExercises((oldWorkoutExercises) =>
       oldWorkoutExercises.map((exercise, index) => {
         if (index === exerciseIndex)
           return {
             ...exercise,
-            volume: value,
+            volume: meta.volume,
+            sets: meta.sets,
           };
         return exercise;
       })
@@ -94,7 +96,7 @@ export default function LogWorkout() {
           </div>
           <div>
             <p>Sets</p>
-            <p>0</p>
+            <p>{workoutSets}</p>
           </div>
         </div>
         <Divider />
@@ -108,13 +110,12 @@ export default function LogWorkout() {
         </div>
       ) : (
         <div className="py-4 flex flex-col gap-8">
-          <p>{workoutVolumes.join(", ")}</p>
           {workoutExercises.map((exercise, index) => (
             <Exercise
               key={`${index}-${exercise.name}`}
               exercise={exercise}
-              onVolumeUpdate={(exerciseVolume) =>
-                updateExerciseVolume(index, exerciseVolume)
+              onMetaUpdate={(exerciseVolume) =>
+                updateExerciseMeta(index, exerciseVolume)
               }
             />
           ))}

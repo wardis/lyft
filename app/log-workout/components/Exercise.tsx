@@ -62,13 +62,13 @@ const columns = [
 
 type Props = {
   exercise: any;
-  onVolumeUpdate: (volume: number) => void;
+  onMetaUpdate: (meta: { volume: number; sets: number }) => void;
 };
 
 const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
   weight && reps ? `${weight}kg x ${reps}` : null;
 
-export default function Exercise({ exercise, onVolumeUpdate }: Props) {
+export default function Exercise({ exercise, onMetaUpdate }: Props) {
   const [sets, setSets] = useState<Set[]>([
     {
       position: 1,
@@ -76,13 +76,19 @@ export default function Exercise({ exercise, onVolumeUpdate }: Props) {
     },
   ]);
 
-  const volume = sets.reduce((total, set) => {
-    if (set.isDone) {
-      return total + parseInt(set.weight) * parseInt(set.reps);
-    }
-    return total;
-  }, 0);
-  useEffect(() => onVolumeUpdate(volume), [volume, onVolumeUpdate]);
+  const exerciseMeta = sets.reduce(
+    (acc, set) => {
+      if (set.isDone) {
+        return {
+          volume: acc.volume + parseInt(set.weight) * parseInt(set.reps),
+          sets: acc.sets + 1,
+        };
+      }
+      return acc;
+    },
+    { volume: 0, sets: 0 }
+  );
+  useEffect(() => onMetaUpdate(exerciseMeta), [exerciseMeta, onMetaUpdate]);
 
   const addSet = () => {
     setSets([
@@ -242,7 +248,7 @@ export default function Exercise({ exercise, onVolumeUpdate }: Props) {
 
   return (
     <div className="flex-col gap-2 flex">
-      <p>volume: {volume}</p>
+      <p>volume: {exerciseMeta.volume}</p>
       <div className="flex items-center gap-2 justify-start">
         <Avatar
           size="sm"
