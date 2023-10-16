@@ -3,6 +3,7 @@
 import React from "react";
 
 import { Divider } from "@nextui-org/divider";
+import { Progress } from "@nextui-org/progress";
 import { useFormContext } from "react-hook-form";
 
 import WorkoutDuration from "./WorkoutDuration";
@@ -28,6 +29,11 @@ export default function WorkoutSummary({}: Props) {
   return (
     <div>
       <div className="bg-background ">
+        <Progress
+          size="sm"
+          aria-label="workout-progress"
+          value={(completedSetCount / totalSetCount) * 100}
+        />
         <div className="grid grid-cols-3 py-2">
           <div>
             <p>Duration</p>
