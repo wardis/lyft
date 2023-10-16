@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/Button";
-
-import { Link } from "@nextui-org/link";
 import LogWorkoutContent from "./components/LogWorkoutContent";
 
 export type Exercise = {
@@ -26,20 +23,6 @@ export default async function LogWorkout() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-3">
-        <h1>Log Workout</h1>
-        <Button
-          href="/workout"
-          size="sm"
-          variant="solid"
-          color="primary"
-          as={Link}
-          className=""
-        >
-          Finish
-        </Button>
-      </div>
-
       <LogWorkoutContent
         allExercises={allExercises}
         fetchedWorkoutExercises={workoutExercises}

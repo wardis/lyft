@@ -1,5 +1,7 @@
 "use client";
 
+import { FormProvider, useForm } from "react-hook-form";
+
 import { Button } from "@/components/ui/Button";
 import { BiDumbbell, BiPlus } from "react-icons/bi";
 
@@ -21,6 +23,9 @@ export default function LogWorkoutContent({
   const [workoutExercises, setWorkoutExercises] = useState<WorkoutExercise[]>(
     fetchedWorkoutExercises
   );
+  const methods = useForm();
+
+  const onSubmit = methods.handleSubmit((data) => console.log("DATA", data));
 
   const workoutVolume = workoutExercises.reduce(
     (total, exercise) => total + (exercise.volume ?? 0),
@@ -59,39 +64,59 @@ export default function LogWorkoutContent({
     );
   };
 
-  return (
-    <div>
-      <WorkoutSummary workoutSets={workoutSets} workoutVolume={workoutVolume} />
+  methods.register("workoutDuration");
 
-      {workoutExercises.length === 0 ? (
-        <div className="py-4 flex flex-col items-center">
-          <BiDumbbell size={32} />
-          <h2 className="font-bold">Get started</h2>
-          <p>Add an exercise to start you workout</p>
-        </div>
-      ) : (
-        <div className="py-4 flex flex-col gap-8">
-          {workoutExercises.map((exercise, index) => (
-            <Exercise
-              key={`${index}-${exercise.name}`}
-              exercise={exercise}
-              onMetaUpdate={(meta) => updateExerciseMeta(index, meta)}
-            />
-          ))}
-        </div>
-      )}
-      <div className="pt-4 flex flex-col gap-4">
-        <AddExercise exercises={allExercises} onSubmit={addExercises} />
-        <div className="flex gap-4">
-          <Button className="flex-1" onClick={() => {}}>
-            Settings
-          </Button>
-          <Button color="danger" className="flex-1" onClick={() => {}}>
-            <BiPlus />
-            Discard Workout
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={onSubmit}>
+        <div className="flex justify-between items-center mb-3">
+          <h1>Log Workout</h1>
+          <Button
+            size="sm"
+            variant="solid"
+            color="primary"
+            className=""
+            type="submit"
+          >
+            Finish
           </Button>
         </div>
-      </div>
-    </div>
+
+        <WorkoutSummary
+          workoutSets={workoutSets}
+          workoutVolume={workoutVolume}
+        />
+
+        {workoutExercises.length === 0 ? (
+          <div className="py-4 flex flex-col items-center">
+            <BiDumbbell size={32} />
+            <h2 className="font-bold">Get started</h2>
+            <p>Add an exercise to start you workout</p>
+          </div>
+        ) : (
+          <div className="py-4 flex flex-col gap-8">
+            {workoutExercises.map((exercise, index) => (
+              <Exercise
+                key={`${index}-${exercise.name}`}
+                exercise={exercise}
+                onMetaUpdate={(meta) => updateExerciseMeta(index, meta)}
+              />
+            ))}
+          </div>
+        )}
+        <div className="pt-4 flex flex-col gap-4">
+          <AddExercise exercises={allExercises} onSubmit={addExercises} />
+          <div className="flex gap-4">
+            <Button className="flex-1" onClick={() => {}}>
+              Settings
+            </Button>
+            <Button color="danger" className="flex-1" onClick={() => {}}>
+              <BiPlus />
+              Discard Workout
+            </Button>
+          </div>
+        </div>
+      </form>
+    </FormProvider>
   );
 }

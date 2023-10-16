@@ -90,7 +90,7 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
     },
     { volume: 0, sets: 0 }
   );
-  useEffect(() => onMetaUpdate({ ...exerciseMeta, notes }), [exerciseMeta]);
+  // useEffect(() => onMetaUpdate({ ...exerciseMeta, notes }), [exerciseMeta]);
 
   const addSet = () => {
     setSets([

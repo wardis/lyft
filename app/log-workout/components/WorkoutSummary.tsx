@@ -2,7 +2,12 @@ import React from "react";
 import WorkoutDuration from "./WorkoutDuration";
 import { Divider } from "@nextui-org/divider";
 
-export default function WorkoutSummary({ workoutVolume, workoutSets }) {
+type Props = {
+  workoutVolume: number;
+  workoutSets: number;
+};
+
+export default function WorkoutSummary({ workoutVolume, workoutSets }: Props) {
   return (
     <div>
       <div className="bg-background ">
