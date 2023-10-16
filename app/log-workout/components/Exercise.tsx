@@ -72,14 +72,14 @@ export default function Exercise({
 }: Props) {
   const [sets, setSets] = useState<ExerciseSet[]>([
     {
-      position: 1,
+      position: 0,
       isDone: false,
     },
   ]);
   const [notes, setNotes] = useState(exercise.notes ?? "");
   const [restDuration, setRestDuration] = useState<Selection>(new Set([]));
 
-  const { register, setValue, control } = useFormContext();
+  const { register, control } = useFormContext();
 
   const exerciseMeta = sets.reduce(
     (acc, set) => {
@@ -96,10 +96,10 @@ export default function Exercise({
   // useEffect(() => onMetaUpdate({ ...exerciseMeta, notes }), [exerciseMeta]);
 
   const addSet = () => {
-    setSets([
-      ...sets,
+    setSets((prev) => [
+      ...prev,
       {
-        position: sets.length + 1,
+        position: sets.length,
         isDone: false,
       },
     ]);

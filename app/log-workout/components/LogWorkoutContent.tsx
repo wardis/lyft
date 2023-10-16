@@ -27,9 +27,9 @@ export default function LogWorkoutContent({
   );
   const methods = useForm();
 
-  const onSubmit = methods.handleSubmit((data) =>
-    console.dir(data, { depth: null })
-  );
+  const onSubmit = methods.handleSubmit((data) => {
+    console.log(data);
+  });
 
   const workoutVolume = workoutExercises.reduce(
     (total, exercise) => total + (exercise.volume ?? 0),

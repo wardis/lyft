@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@nextui-org/button";
@@ -36,7 +35,7 @@ export default function SelectSetType({ name, index }: Props) {
       <DropdownTrigger>
         <Button isIconOnly size="sm" variant="light">
           {!["drop", "failure", "warmup"].includes(selectedValue)
-            ? setTypeMap["normal"](String(index))
+            ? setTypeMap["normal"](String(index + 1))
             : setTypeMap[selectedValue]}
         </Button>
       </DropdownTrigger>
