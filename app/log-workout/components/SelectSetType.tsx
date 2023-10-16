@@ -15,9 +15,10 @@ import { setTypeMap } from "./Exercise";
 type Props = {
   name: string;
   index: number;
+  deleteSet: () => void;
 };
 
-export default function SelectSetType({ name, index }: Props) {
+export default function SelectSetType({ name, index, deleteSet }: Props) {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["normal"]));
   const { setValue, getValues } = useFormContext();
 
@@ -27,8 +28,9 @@ export default function SelectSetType({ name, index }: Props) {
   );
 
   useEffect(() => {
+    if (selectedValue == "delete") return deleteSet();
     setValue(name, selectedValue);
-  }, [selectedValue, name, setValue]);
+  }, [selectedValue, name, setValue, deleteSet]);
 
   return (
     <Dropdown>

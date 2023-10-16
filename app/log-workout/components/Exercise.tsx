@@ -76,40 +76,24 @@ export default function Exercise({
       isDone: false,
     },
   ]);
-  const [notes, setNotes] = useState(exercise.notes ?? "");
   const [restDuration, setRestDuration] = useState<Selection>(new Set([]));
-
   const { register, control } = useFormContext();
-
-  const exerciseMeta = sets.reduce(
-    (acc, set) => {
-      if (set.isDone) {
-        return {
-          volume: acc.volume + parseInt(set.weight) * parseInt(set.reps),
-          sets: acc.sets + 1,
-        };
-      }
-      return acc;
-    },
-    { volume: 0, sets: 0 }
-  );
-  // useEffect(() => onMetaUpdate({ ...exerciseMeta, notes }), [exerciseMeta]);
 
   const addSet = () => {
     setSets((prev) => [
       ...prev,
       {
-        position: sets.length,
+        position: prev.length,
         isDone: false,
       },
     ]);
   };
 
-  const deleteSet = (position: number) => {
-    setSets((oldSets) =>
-      oldSets
-        .filter((set) => set.position !== position)
-        .map((set, index) => ({ ...set, position: index + 1 }))
+  const deleteSet = (position: number) => () => {
+    setSets(
+      (prev) => prev.filter((set) => set.position !== position)
+      // .map((set, index) => ({ ...set, position: index })) // TODO: rethink key position when deleting a set
+      // indexOf? uuid ?
     );
   };
 
@@ -121,7 +105,13 @@ export default function Exercise({
         const { name } = register(
           `exercises.${exerciseIndex}.sets.${set.position}.type`
         );
-        return <SelectSetType name={name} index={set.position} />;
+        return (
+          <SelectSetType
+            name={name}
+            index={set.position}
+            deleteSet={deleteSet(set.position)}
+          />
+        );
       }
       case "previous":
         return (
