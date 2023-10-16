@@ -86,10 +86,7 @@ export default function LogWorkoutContent({
           </Button>
         </div>
 
-        <WorkoutSummary
-          workoutSets={workoutSets}
-          workoutVolume={workoutVolume}
-        />
+        <WorkoutSummary />
 
         {workoutExercises.length === 0 ? (
           <div className="py-4 flex flex-col items-center">

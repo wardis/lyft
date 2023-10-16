@@ -1,15 +1,30 @@
+"use client";
+
 import React from "react";
 
 import { Divider } from "@nextui-org/divider";
+import { useFormContext } from "react-hook-form";
 
 import WorkoutDuration from "./WorkoutDuration";
 
-type Props = {
-  workoutVolume: number;
-  workoutSets: number;
-};
+type Props = {};
 
-export default function WorkoutSummary({ workoutVolume, workoutSets }: Props) {
+export default function WorkoutSummary({}: Props) {
+  // workoutVolume, workoutSets;
+  const { getValues, watch } = useFormContext();
+  const formValues = getValues();
+  const watchAll = watch(["exercises"]);
+
+  const allSets =
+    formValues.exercises?.flatMap((exercise) => exercise.sets) || [];
+  const totalSetCount = allSets.length;
+  const completedSets = allSets.filter((set) => set.isDone);
+  const completedSetCount = completedSets.length;
+  const workoutVolume = completedSets.reduce(
+    (total, set) => total + set.weight * set.reps,
+    0
+  );
+
   return (
     <div>
       <div className="bg-background ">
@@ -24,7 +39,9 @@ export default function WorkoutSummary({ workoutVolume, workoutSets }: Props) {
           </div>
           <div>
             <p>Sets</p>
-            <p>{workoutSets}</p>
+            <p>
+              {completedSetCount} / {totalSetCount}
+            </p>
           </div>
         </div>
         <Divider />
