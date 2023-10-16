@@ -46,19 +46,23 @@ export default function SelectSetType({ name, index }: Props) {
         onSelectionChange={setSelectedKeys}
       >
         <DropdownItem key="warmup" value="warmup" textValue="warmup">
-          {setTypeMap["warmup"]} Warm Up Set
+          <div className="flex gap-2">{setTypeMap["warmup"]} Warm Up Set</div>
         </DropdownItem>
         <DropdownItem key="normal" value="normal" textValue="normal">
-          {setTypeMap["normal"]("1")} Normal Set
+          <div className="flex gap-2">
+            {setTypeMap["normal"]("1")} Normal Set
+          </div>
         </DropdownItem>
         <DropdownItem key="failure" value="failure" textValue="failure">
-          {setTypeMap["failure"]} Failure Set
+          <div className="flex gap-2">{setTypeMap["failure"]} Failure Set</div>
         </DropdownItem>
         <DropdownItem key="drop" value="drop" textValue="drop">
-          {setTypeMap["drop"]} Drop Set
+          <div className="flex gap-2">{setTypeMap["drop"]} Drop Set</div>
         </DropdownItem>
         <DropdownItem key="delete" value="delete" textValue="delete">
-          {<MdDeleteOutline size="1.2rem" />} Remove Set
+          <div className="flex gap-2">
+            {<MdDeleteOutline size="1.2rem" />} Remove Set
+          </div>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
