@@ -1,18 +1,9 @@
 "use client";
 
-
 import React, { useEffect, useState } from "react";
 
 import { Avatar } from "@nextui-org/avatar";
-import { Button as NextUIButton } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
 import { Input } from "@nextui-org/input";
 import {
   Table,
@@ -122,52 +113,6 @@ export default function Exercise({
     );
   };
 
-  const changeWeight = (position: number, value: string) => {
-    setSets((oldSets) =>
-      oldSets.map((set) => {
-        if (set.position === position) {
-          return { ...set, weight: value };
-        }
-        return set;
-      })
-    );
-  };
-  const changeReps = (position: number, value: string) => {
-    setSets((oldSets) =>
-      oldSets.map((set) => {
-        if (set.position === position) {
-          return { ...set, reps: value };
-        }
-        return set;
-      })
-    );
-  };
-  const changeDone = (position: number, value: boolean) => {
-    setSets((oldSets) =>
-      oldSets.map((set) => {
-        if (set.position === position) {
-          return {
-            ...set,
-            weight: set.weight ?? "0",
-            reps: set.reps ?? "0",
-            isDone: value,
-          };
-        }
-        return set;
-      })
-    );
-  };
-  const changeType = (position: number, value: ExerciseSet["type"]) => {
-    setSets((oldSets) =>
-      oldSets.map((set) => {
-        if (set.position === position) {
-          return { ...set, type: value };
-        }
-        return set;
-      })
-    );
-  };
-
   const renderCell = (set: ExerciseSet, columnKey: React.Key) => {
     const cellValue = set[columnKey as keyof ExerciseSet];
 
@@ -240,6 +185,7 @@ export default function Exercise({
       </div>
       <div className="grid grid-cols-10 gap-2">
         <RestTimer
+          name={"exercises." + exerciseIndex + ".restTimer"}
           restDuration={restDuration}
           setRestDuration={setRestDuration}
         />

@@ -3,6 +3,7 @@
 import React from "react";
 
 import { Select, SelectItem, Selection } from "@nextui-org/react";
+import { useFormContext } from "react-hook-form";
 import { CgTimer } from "react-icons/cg";
 
 const durationOptions = [
@@ -20,10 +21,16 @@ const durationOptions = [
 type Props = {
   restDuration: Selection;
   setRestDuration: React.Dispatch<React.SetStateAction<Selection>>;
+  name: string;
 };
 
-export default function RestTimer({ restDuration, setRestDuration }: Props) {
+export default function RestTimer({
+  restDuration,
+  setRestDuration,
+  name,
+}: Props) {
   const value = Array.from(restDuration)[0];
+  const { register } = useFormContext();
 
   return (
     <>
@@ -35,6 +42,7 @@ export default function RestTimer({ restDuration, setRestDuration }: Props) {
         selectedKeys={restDuration}
         size="sm"
         onSelectionChange={setRestDuration}
+        {...register(name)}
       >
         {durationOptions.map((option) => (
           <SelectItem key={option.value} value={option.value}>
