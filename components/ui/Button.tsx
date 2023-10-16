@@ -1,4 +1,4 @@
-import { Button as NextUIButton, ButtonProps } from "@nextui-org/button";
+import { ButtonProps, Button as NextUIButton } from "@nextui-org/button";
 
 export function Button(props: ButtonProps) {
   return (

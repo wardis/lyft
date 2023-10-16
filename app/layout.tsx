@@ -1,10 +1,12 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import SupabaseProvider from "./supabase-provider";
+
 import Navbar from "@/components/ui/Navbar";
-import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
+
+import { Providers } from "./providers";
+import SupabaseProvider from "./supabase-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,31 +1,34 @@
 "use client";
 
+
 import React, { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/Button";
+import { Avatar } from "@nextui-org/avatar";
 import { Button as NextUIButton } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
-import { Avatar } from "@nextui-org/avatar";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownTrigger,
   DropdownSection,
+  DropdownTrigger,
 } from "@nextui-org/dropdown";
+import { Input } from "@nextui-org/input";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableColumn,
-  TableRow,
   TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from "@nextui-org/table";
+import { Controller, useFormContext } from "react-hook-form";
 import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
 import { MdDone } from "react-icons/md";
-import { Input } from "@nextui-org/input";
+
+import { Button } from "@/components/ui/Button";
+
 import RestTimer from "./RestTimer";
-import { Controller, useFormContext } from "react-hook-form";
 import SelectSetType from "./SelectSetType";
 
 type ExerciseSet = {

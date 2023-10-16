@@ -1,10 +1,13 @@
 "use client";
 
 import React from "react";
-import { useSupabase } from "../supabase-provider";
+
 import { Auth } from "@supabase/auth-ui-react";
-import { getURL } from "@/utils/helpers";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+
+import { getURL } from "@/utils/helpers";
+
+import { useSupabase } from "../supabase-provider";
 
 export default function AuthUI() {
   const supabase = useSupabase();

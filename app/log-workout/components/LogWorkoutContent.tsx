@@ -1,14 +1,16 @@
 "use client";
 
-import { FormProvider, useForm } from "react-hook-form";
+import { useState } from "react";
 
-import { Button } from "@/components/ui/Button";
+import { FormProvider, useForm } from "react-hook-form";
 import { BiDumbbell, BiPlus } from "react-icons/bi";
 
-import Exercise from "./Exercise";
+import { Button } from "@/components/ui/Button";
+
 import AddExercise from "./AddExercise";
+import Exercise from "./Exercise";
 import WorkoutSummary from "./WorkoutSummary";
-import { useState } from "react";
+
 import { Exercise as ExerciseType, WorkoutExercise } from "../page";
 
 type Props = {

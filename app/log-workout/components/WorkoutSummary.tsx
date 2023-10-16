@@ -1,6 +1,8 @@
 import React from "react";
-import WorkoutDuration from "./WorkoutDuration";
+
 import { Divider } from "@nextui-org/divider";
+
+import WorkoutDuration from "./WorkoutDuration";
 
 type Props = {
   workoutVolume: number;

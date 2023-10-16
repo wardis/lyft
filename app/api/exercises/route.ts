@@ -1,5 +1,6 @@
-import { createServerSupabaseClient } from "@/app/supabase-server";
 import { NextResponse } from "next/server";
+
+import { createServerSupabaseClient } from "@/app/supabase-server";
 
 const exercises = [
   {

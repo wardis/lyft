@@ -1,7 +1,9 @@
-import { BiDumbbell } from "react-icons/bi";
-import { createServerSupabaseClient } from "../supabase-server";
 import Link from "next/link";
+import { BiDumbbell } from "react-icons/bi";
+
 import { Button } from "@/components/ui/Button";
+
+import { createServerSupabaseClient } from "../supabase-server";
 
 export const dynamic = "force-dynamic";
 

@@ -1,20 +1,21 @@
+import { Avatar } from "@nextui-org/avatar";
+import { Button } from "@nextui-org/button";
+import { Link } from "@nextui-org/link";
 import {
-  Navbar as NextUINavbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Navbar as NextUINavbar,
 } from "@nextui-org/navbar";
-import { Avatar } from "@nextui-org/avatar";
-import { Link } from "@nextui-org/link";
+import NextLink from "next/link";
 
 import { createServerSupabaseClient } from "@/app/supabase-server";
-import SignOutButton from "./SignOutButton";
-import NextLink from "next/link";
 import { siteConfig } from "@/config/site";
-import { Button } from "@nextui-org/button";
+
+import SignOutButton from "./SignOutButton";
 
 export default async function Navbar() {
   const supabase = createServerSupabaseClient();

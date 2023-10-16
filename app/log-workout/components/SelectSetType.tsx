@@ -1,8 +1,7 @@
+
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@nextui-org/button";
-import { setTypeMap } from "./Exercise";
-import { MdDeleteOutline } from "react-icons/md";
 import {
   Dropdown,
   DropdownItem,
@@ -10,6 +9,9 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { useFormContext } from "react-hook-form";
+import { MdDeleteOutline } from "react-icons/md";
+
+import { setTypeMap } from "./Exercise";
 
 type Props = {
   name: string;

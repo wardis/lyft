@@ -1,7 +1,9 @@
 import Image from "next/image";
-import { getSession } from "../supabase-server";
 import { redirect } from "next/navigation";
+
 import AuthUI from "./AuthUI";
+
+import { getSession } from "../supabase-server";
 
 export default async function SignIn() {
   const session = await getSession();

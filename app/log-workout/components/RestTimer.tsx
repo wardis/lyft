@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import { CgTimer } from "react-icons/cg";
 import { Select, SelectItem, Selection } from "@nextui-org/react";
+import { CgTimer } from "react-icons/cg";
 
 const durationOptions = [
   { value: "OFF", label: "off" },

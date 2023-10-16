@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { Avatar } from "@nextui-org/avatar";
+import { Input } from "@nextui-org/input";
 import {
   Modal,
   ModalBody,
@@ -7,12 +9,10 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal";
-import { Button } from "@/components/ui/Button";
-
-import { Input } from "@nextui-org/input";
-import { Avatar } from "@nextui-org/avatar";
-import { BiSearch } from "react-icons/bi";
 import { Listbox, ListboxItem } from "@nextui-org/react";
+import { BiSearch } from "react-icons/bi";
+
+import { Button } from "@/components/ui/Button";
 
 export default function AddExercise({ exercises, onSubmit }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
