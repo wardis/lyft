@@ -75,5 +75,5 @@ export async function GET() {
 
   // const { data } = await supabase.from("exercices").select();
 
-  return NextResponse.json({ data: exercises });
+  return NextResponse.json(exercises);
 }
