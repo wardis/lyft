@@ -25,7 +25,9 @@ export default function LogWorkoutContent({
   );
   const methods = useForm();
 
-  const onSubmit = methods.handleSubmit((data) => console.log("DATA", data));
+  const onSubmit = methods.handleSubmit((data) =>
+    console.dir(data, { depth: null })
+  );
 
   const workoutVolume = workoutExercises.reduce(
     (total, exercise) => total + (exercise.volume ?? 0),
@@ -95,13 +97,19 @@ export default function LogWorkoutContent({
           </div>
         ) : (
           <div className="py-4 flex flex-col gap-8">
-            {workoutExercises.map((exercise, index) => (
-              <Exercise
-                key={`${index}-${exercise.name}`}
-                exercise={exercise}
-                onMetaUpdate={(meta) => updateExerciseMeta(index, meta)}
-              />
-            ))}
+            {workoutExercises.map((exercise, index) => {
+              methods.register("exercises." + index + ".base", {
+                value: { id: exercise.id, name: exercise.name },
+              });
+              return (
+                <Exercise
+                  key={index}
+                  exercise={exercise}
+                  exerciseIndex={index}
+                  // onMetaUpdate={(meta) => updateExerciseMeta(index, meta)}
+                />
+              );
+            })}
           </div>
         )}
         <div className="pt-4 flex flex-col gap-4">

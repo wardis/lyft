@@ -22,9 +22,11 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
-import { MdDeleteOutline, MdDone } from "react-icons/md";
+import { MdDone } from "react-icons/md";
 import { Input } from "@nextui-org/input";
 import RestTimer from "./RestTimer";
+import { Controller, useFormContext } from "react-hook-form";
+import SelectSetType from "./SelectSetType";
 
 type ExerciseSet = {
   position: number;
@@ -34,7 +36,7 @@ type ExerciseSet = {
   type?: "normal" | "warmup" | "failure" | "drop";
 };
 
-const setTypeMap = {
+export const setTypeMap = {
   normal: (position: string) => (
     <p className="font-bold w-5 text-center">{position}</p>
   ),
@@ -60,15 +62,20 @@ const columns = [
   { name: <MdDone />, uid: "done" },
 ];
 
-type Props = {
-  exercise: any;
-  onMetaUpdate: (meta: { volume: number; sets: number }) => void;
-};
-
 const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
   weight && reps ? `${weight}kg x ${reps}` : null;
 
-export default function Exercise({ exercise, onMetaUpdate }: Props) {
+type Props = {
+  exercise: any;
+  onMetaUpdate: (meta: { volume: number; sets: number }) => void;
+  exerciseIndex: number;
+};
+
+export default function Exercise({
+  exercise,
+  onMetaUpdate,
+  exerciseIndex,
+}: Props) {
   const [sets, setSets] = useState<ExerciseSet[]>([
     {
       position: 1,
@@ -77,6 +84,8 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
   ]);
   const [notes, setNotes] = useState(exercise.notes ?? "");
   const [restDuration, setRestDuration] = useState<Selection>(new Set([]));
+
+  const { register, setValue, control } = useFormContext();
 
   const exerciseMeta = sets.reduce(
     (acc, set) => {
@@ -160,55 +169,12 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
     const cellValue = set[columnKey as keyof ExerciseSet];
 
     switch (columnKey) {
-      case "set":
-        return (
-          <Dropdown backdrop="blur">
-            <DropdownTrigger>
-              <NextUIButton isIconOnly size="sm" variant="light">
-                {!["drop", "failure", "warmup"].includes(set.type)
-                  ? setTypeMap["normal"](String(set.position))
-                  : setTypeMap[set.type]}
-              </NextUIButton>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Set action menu"
-              onAction={(key) => {
-                if (key === "delete") return deleteSet(set.position);
-                changeType(set.position, key as ExerciseSet["type"]);
-              }}
-            >
-              <DropdownSection
-                title="Select set type"
-                classNames={{ heading: "text-center" }}
-              >
-                <DropdownItem key="warmup" startContent={setTypeMap["warmup"]}>
-                  Warm Up Set
-                </DropdownItem>
-                <DropdownItem
-                  key="normal"
-                  startContent={setTypeMap["normal"]("1")}
-                >
-                  Normal Set
-                </DropdownItem>
-                <DropdownItem
-                  key="failure"
-                  startContent={setTypeMap["failure"]}
-                >
-                  Failure Set
-                </DropdownItem>
-                <DropdownItem key="drop" startContent={setTypeMap["drop"]}>
-                  Drop Set
-                </DropdownItem>
-                <DropdownItem
-                  key="delete"
-                  startContent={<MdDeleteOutline size="1.2rem" />}
-                >
-                  Remove Set
-                </DropdownItem>
-              </DropdownSection>
-            </DropdownMenu>
-          </Dropdown>
+      case "set": {
+        const { name } = register(
+          `exercises.${exerciseIndex}.sets.${set.position}.type`
         );
+        return <SelectSetType name={name} index={set.position} />;
+      }
       case "previous":
         return (
           <p className=" text-gray-400">
@@ -218,35 +184,41 @@ export default function Exercise({ exercise, onMetaUpdate }: Props) {
       case "weight":
         return (
           <Input
+            {...register(
+              `exercises.${exerciseIndex}.sets.${set.position}.weight`
+            )}
             size="sm"
             variant="flat"
             classNames={{
               inputWrapper: "bg-transparent shadow-none",
             }}
             placeholder={exercise.previousSet?.weight ?? "0"}
-            value={set.weight ?? ""}
-            onChange={(e) => changeWeight(set.position, e.target.value)}
           />
         );
       case "reps":
         return (
           <Input
+            {...register(
+              `exercises.${exerciseIndex}.sets.${set.position}.reps`
+            )}
             size="sm"
             classNames={{
               inputWrapper: "bg-transparent shadow-none",
             }}
             placeholder={exercise.previousSet?.reps ?? "0"}
-            value={set.reps ?? ""}
-            onChange={(e) => changeReps(set.position, e.target.value)}
           />
         );
       case "done":
         return (
-          <Checkbox
-            checked={set.isDone}
-            onChange={(e) => changeDone(set.position, e.target.checked)}
+          <Controller
+            control={control}
+            name={`exercises.${exerciseIndex}.sets.${set.position}.isDone`}
+            render={({ field: { onChange, value } }) => (
+              <Checkbox checked={value} onChange={onChange} />
+            )}
           />
         );
+
       default:
         return cellValue;
     }
