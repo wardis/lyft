@@ -196,8 +196,9 @@ export default function Exercise({
           classNames={{
             inputWrapper: "bg-transparent shadow-none w-full text-sm h-[3rem]",
           }}
-          value={exercise.notes}
-          onChange={(e) => setNotes(e.target.value)}
+          // value={exercise.notes}
+          {...register("exercises." + exerciseIndex + ".notes")}
+          // onChange={(e) => setNotes(e.target.value)}
           placeholder="Add notes here..."
         />
       </div>

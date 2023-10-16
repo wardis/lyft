@@ -13,9 +13,9 @@ type Props = {};
 export default function WorkoutSummary({}: Props) {
   // workoutVolume, workoutSets;
   const { getValues, watch } = useFormContext();
+
   const formValues = getValues();
   const watchAll = watch(["exercises"]);
-
   const allSets =
     formValues.exercises?.flatMap((exercise) => exercise.sets) || [];
   const totalSetCount = allSets.length;
