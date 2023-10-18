@@ -105,7 +105,6 @@ export default function LogWorkoutContent({
                   key={index}
                   exercise={exercise}
                   exerciseIndex={index}
-                  // onMetaUpdate={(meta) => updateExerciseMeta(index, meta)}
                 />
               );
             })}

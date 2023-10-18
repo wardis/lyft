@@ -13,5 +13,5 @@ export default async function Navbar() {
     .eq("id", user?.id ?? "")
     .single();
 
-  return <NavbarClient user={user} userData={userData} />;
+  return <NavbarClient user={user || {}} userData={userData || {}} />;
 }

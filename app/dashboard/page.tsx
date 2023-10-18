@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/Button";
 
 import { createServerSupabaseClient } from "../supabase-server";
 
-export const dynamic = "force-dynamic";
-
 export default async function Dashboard() {
   const supabase = createServerSupabaseClient();
   const {

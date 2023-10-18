@@ -6,7 +6,10 @@ import { Divider } from "@nextui-org/divider";
 import { Progress } from "@nextui-org/progress";
 import { useFormContext } from "react-hook-form";
 
+import { ExerciseSet } from "./Exercise";
 import WorkoutDuration from "./WorkoutDuration";
+
+import { WorkoutExercise } from "../page";
 
 type Props = {};
 
@@ -17,12 +20,15 @@ export default function WorkoutSummary({}: Props) {
   const formValues = getValues();
   const watchAll = watch(["exercises"]);
   const allSets =
-    formValues.exercises?.flatMap((exercise) => exercise.sets) || [];
+    formValues.exercises?.flatMap(
+      (exercise: WorkoutExercise) => exercise.sets
+    ) || [];
   const totalSetCount = allSets.length;
-  const completedSets = allSets.filter((set) => set.isDone);
+  const completedSets = allSets.filter((set: ExerciseSet) => set.isDone);
   const completedSetCount = completedSets.length;
   const workoutVolume = completedSets.reduce(
-    (total, set) => total + set.weight * set.reps,
+    (total: number, set: ExerciseSet) =>
+      total + parseInt(set.weight || "0") * parseInt(set.reps || "0"),
     0
   );
 

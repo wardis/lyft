@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import { Avatar } from "@nextui-org/avatar";
 import { Checkbox } from "@nextui-org/checkbox";
@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/Button";
 import RestTimer from "./RestTimer";
 import SelectSetType from "./SelectSetType";
 
-type ExerciseSet = {
+export type ExerciseSet = {
   position: number;
   weight?: string;
   reps?: string;
@@ -30,7 +30,7 @@ type ExerciseSet = {
   type?: "normal" | "warmup" | "failure" | "drop";
 };
 
-export const setTypeMap = {
+export const setTypeMap: Record<string, any> = {
   normal: (position: string) => (
     <p className="font-bold w-5 text-center">{position}</p>
   ),
@@ -61,22 +61,17 @@ const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
 
 type Props = {
   exercise: any;
-  onMetaUpdate: (meta: { volume: number; sets: number }) => void;
   exerciseIndex: number;
 };
 
-export default function Exercise({
-  exercise,
-  onMetaUpdate,
-  exerciseIndex,
-}: Props) {
+export default function Exercise({ exercise, exerciseIndex }: Props) {
   const [sets, setSets] = useState<ExerciseSet[]>([
     {
       position: 0,
       isDone: false,
     },
   ]);
-  const [restDuration, setRestDuration] = useState<Selection>(new Set([]));
+  const [restDuration, setRestDuration] = useState<Set<string>>(new Set([]));
   const { register, control } = useFormContext();
 
   const addSet = () => {

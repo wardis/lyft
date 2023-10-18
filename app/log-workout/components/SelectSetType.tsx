@@ -38,14 +38,14 @@ export default function SelectSetType({ name, index, deleteSet }: Props) {
         <Button isIconOnly size="sm" variant="light">
           {!["drop", "failure", "warmup"].includes(selectedValue)
             ? setTypeMap["normal"](String(index + 1))
-            : setTypeMap[selectedValue]}
+            : setTypeMap[selectedValue as keyof typeof setTypeMap]}
         </Button>
       </DropdownTrigger>
       <DropdownMenu
         aria-label="Select set type"
         selectionMode="single"
         selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
+        onSelectionChange={setSelectedKeys as any}
       >
         <DropdownItem key="warmup" value="warmup" textValue="warmup">
           <div className="flex gap-2">{setTypeMap["warmup"]} Warm Up Set</div>

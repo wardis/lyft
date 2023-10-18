@@ -21,8 +21,8 @@ import { siteConfig } from "@/config/site";
 import SignOutButton from "./SignOutButton";
 
 type Props = {
-  user: { email: string };
-  userData: { full_name?: string; avatar_url?: string };
+  user: { email?: string };
+  userData: { full_name?: string | null; avatar_url?: string | null };
 };
 
 export default function NavbarClient({ user, userData }: Props) {

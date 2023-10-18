@@ -14,9 +14,16 @@ import { BiSearch } from "react-icons/bi";
 
 import { Button } from "@/components/ui/Button";
 
-export default function AddExercise({ exercises, onSubmit }) {
+import { Exercise } from "../page";
+
+type Props = {
+  exercises: (Exercise & { image?: string; target?: string })[];
+  onSubmit: (ids: string[]) => void;
+};
+
+export default function AddExercise({ exercises, onSubmit }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selectedExerciseIds, setSelectedExerciseIds] = useState([]);
+  const [selectedExerciseIds, setSelectedExerciseIds] = useState<string[]>([]);
 
   return (
     <>
@@ -53,7 +60,7 @@ export default function AddExercise({ exercises, onSubmit }) {
                   }}
                   selectionMode="multiple"
                   selectedKeys={selectedExerciseIds}
-                  onSelectionChange={setSelectedExerciseIds}
+                  onSelectionChange={setSelectedExerciseIds as any}
                 >
                   {exercises.map(({ name, id, image, target }) => (
                     <ListboxItem key={id} textValue={name}>

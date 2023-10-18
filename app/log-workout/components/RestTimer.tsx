@@ -19,8 +19,8 @@ const durationOptions = [
 ];
 
 type Props = {
-  restDuration: Selection;
-  setRestDuration: React.Dispatch<React.SetStateAction<Selection>>;
+  restDuration: any;
+  setRestDuration: any;
   name: string;
 };
 

@@ -8,6 +8,8 @@ import { siteConfig } from "@/config/site";
 import { Providers } from "./providers";
 import SupabaseProvider from "./supabase-provider";
 
+export const dynamic = "force-dynamic";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
