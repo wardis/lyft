@@ -1,9 +1,10 @@
-import { WorkoutSummary } from "@/components/ui/WorkoutSummary";
 import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/card";
 import Link from "next/link";
 import { BiMedal, BiShareAlt } from "react-icons/bi";
+
+import { WorkoutSummary } from "@/components/ui/WorkoutSummary";
 
 const EXERCISES_PER_CARD = 3;
 
