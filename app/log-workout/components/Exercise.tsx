@@ -182,7 +182,7 @@ export default function Exercise({ exercise, onDelete }: Props) {
         <Avatar size="sm" src="/assets/dumbbell.svg" className="p-1" />
         <p className="text-primary flex-grow">{exercise.name}</p>
         <Button onClick={onDelete} variant="light" isIconOnly>
-          <BiTrash className="text-primary" size="24" />
+          <BiTrash className="text-primary" size="20" />
         </Button>
       </div>
       <div className="grid grid-cols-10 gap-2">

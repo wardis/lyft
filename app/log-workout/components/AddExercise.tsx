@@ -24,6 +24,10 @@ type Props = {
 export default function AddExercise({ exercises, onSubmit }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedExerciseIds, setSelectedExerciseIds] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const filteredExercises = exercises.filter((exercise) =>
+    exercise.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <>
@@ -43,6 +47,8 @@ export default function AddExercise({ exercises, onSubmit }: Props) {
                 <Input
                   startContent={<BiSearch />}
                   placeholder="Search exercise"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                 />
                 <div className="flex gap-1">
                   <Button className="flex-1">All Equipment</Button>
@@ -62,7 +68,7 @@ export default function AddExercise({ exercises, onSubmit }: Props) {
                   selectedKeys={selectedExerciseIds}
                   onSelectionChange={setSelectedExerciseIds as any}
                 >
-                  {exercises.map(({ name, id, image, target }) => (
+                  {filteredExercises.map(({ name, id, image, target }) => (
                     <ListboxItem key={id} textValue={name}>
                       <div className="flex gap-3">
                         <Avatar src={image} className="p-2 bg-blue-200" />
