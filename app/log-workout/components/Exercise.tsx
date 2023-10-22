@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@nextui-org/table";
 import { Controller, useFormContext } from "react-hook-form";
-import { BiDotsVertical, BiDumbbell, BiPlus } from "react-icons/bi";
+import { BiDotsVertical, BiDumbbell, BiPlus, BiTrash } from "react-icons/bi";
 import { MdDone } from "react-icons/md";
 
 import { Button } from "@/components/ui/Button";
@@ -61,10 +61,11 @@ const formatPreviousSet = ({ weight, reps } = { weight: "", reps: "" }) =>
 
 type Props = {
   exercise: any;
-  exerciseIndex: number;
+  // exerciseIndex: number;
+  onDelete: (index: number) => void;
 };
 
-export default function Exercise({ exercise, exerciseIndex }: Props) {
+export default function Exercise({ exercise, onDelete }: Props) {
   const [sets, setSets] = useState<ExerciseSet[]>([
     {
       position: 0,
@@ -98,7 +99,7 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
     switch (columnKey) {
       case "set": {
         const { name } = register(
-          `exercises.${exerciseIndex}.sets.${set.position}.type`
+          `exercises.${exercise.exerciseKey}.sets.${set.position}.type`
         );
         return (
           <SelectSetType
@@ -118,7 +119,7 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
         return (
           <Input
             {...register(
-              `exercises.${exerciseIndex}.sets.${set.position}.weight`
+              `exercises.${exercise.exerciseKey}.sets.${set.position}.weight`
             )}
             size="sm"
             variant="flat"
@@ -132,7 +133,7 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
         return (
           <Input
             {...register(
-              `exercises.${exerciseIndex}.sets.${set.position}.reps`
+              `exercises.${exercise.exerciseKey}.sets.${set.position}.reps`
             )}
             size="sm"
             classNames={{
@@ -145,7 +146,7 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
         return (
           <Controller
             control={control}
-            name={`exercises.${exerciseIndex}.sets.${set.position}.isDone`}
+            name={`exercises.${exercise.exerciseKey}.sets.${set.position}.isDone`}
             render={({ field: { onChange, value } }) => (
               <Checkbox checked={value} onChange={onChange} />
             )}
@@ -162,11 +163,13 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
       <div className="flex items-center gap-2 justify-start">
         <Avatar size="sm" src="/assets/dumbbell.svg" className="p-1" />
         <p className="text-primary flex-grow">{exercise.name}</p>
-        <BiDotsVertical className="text-primary" size="24" />
+        <Button onClick={onDelete} variant="light" isIconOnly>
+          <BiTrash className="text-primary" size="24" />
+        </Button>
       </div>
       <div className="grid grid-cols-10 gap-2">
         <RestTimer
-          name={"exercises." + exerciseIndex + ".restTimer"}
+          name={"exercises." + exercise.exerciseKey + ".restTimer"}
           restDuration={restDuration}
           setRestDuration={setRestDuration}
         />
@@ -178,7 +181,7 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
             inputWrapper: "bg-transparent shadow-none w-full text-sm h-[3rem]",
           }}
           // value={exercise.notes}
-          {...register("exercises." + exerciseIndex + ".notes")}
+          {...register("exercises." + exercise.exerciseKey + ".notes")}
           // onChange={(e) => setNotes(e.target.value)}
           placeholder="Add notes here..."
         />

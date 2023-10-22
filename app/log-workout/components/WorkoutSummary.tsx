@@ -20,8 +20,8 @@ export default function WorkoutSummary({}: Props) {
   const formValues = getValues();
   const watchAll = watch(["exercises"]);
   const allSets =
-    formValues.exercises?.flatMap(
-      (exercise: WorkoutExercise) => exercise.sets
+    Object.keys(formValues.exercises || {})?.flatMap(
+      (key) => formValues.exercises[key].sets
     ) || [];
   const totalSetCount = allSets.length;
   const completedSets = allSets.filter((set: ExerciseSet) => set?.isDone);

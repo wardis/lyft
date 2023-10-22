@@ -22,8 +22,13 @@ export default function LogWorkoutContent({
   allExercises,
   fetchedWorkoutExercises,
 }: Props) {
-  const [workoutExercises, setWorkoutExercises] = useState<WorkoutExercise[]>(
-    fetchedWorkoutExercises
+  const [workoutExercises, setWorkoutExercises] = useState<
+    (WorkoutExercise & { exerciseKey: string })[]
+  >(
+    fetchedWorkoutExercises.map((exercise, index) => ({
+      ...exercise,
+      exerciseKey: crypto.randomUUID(),
+    }))
   );
   const methods = useForm();
 
@@ -31,41 +36,27 @@ export default function LogWorkoutContent({
     console.log(data);
   });
 
-  const workoutVolume = workoutExercises.reduce(
-    (total, exercise) => total + (exercise.volume ?? 0),
-    0
-  );
-  const workoutSets = workoutExercises.reduce(
-    (total, exercise) => total + (exercise.sets ?? 0),
-    0
-  );
-
   const addExercises = (list: string[]) => {
     const intIds = list.map((id) => parseInt(id));
-    setWorkoutExercises((oldWorkoutExercises) => [
-      ...oldWorkoutExercises,
+    setWorkoutExercises((prev) => [
+      ...prev,
       ...allExercises
         .filter((exercise) => intIds.includes(exercise.id))
-        .map((exercise) => ({ ...exercise, notes: "", volume: 0, sets: 0 })),
+        .map((exercise, index) => ({
+          ...exercise,
+          notes: "",
+          volume: 0,
+          sets: 0,
+          exerciseKey: crypto.randomUUID(),
+        })),
     ]);
   };
 
-  const updateExerciseMeta = (
-    exerciseIndex: number,
-    meta: { volume: number; sets: number; notes: string }
-  ) => {
-    setWorkoutExercises((oldWorkoutExercises) =>
-      oldWorkoutExercises.map((exercise, index) => {
-        if (index === exerciseIndex)
-          return {
-            ...exercise,
-            volume: meta.volume,
-            sets: meta.sets,
-            notes: meta.notes,
-          };
-        return exercise;
-      })
+  const deleteExercise = (exerciseKey: string) => {
+    setWorkoutExercises((prev) =>
+      prev.filter((exercise) => exerciseKey !== exercise.exerciseKey)
     );
+    methods.unregister(["exercises." + exerciseKey]);
   };
 
   methods.register("workoutDuration");
@@ -97,14 +88,14 @@ export default function LogWorkoutContent({
         ) : (
           <div className="py-4 flex flex-col gap-8">
             {workoutExercises.map((exercise, index) => {
-              methods.register("exercises." + index + ".base", {
+              methods.register("exercises." + exercise.exerciseKey + ".base", {
                 value: { id: exercise.id, name: exercise.name },
               });
               return (
                 <Exercise
-                  key={index}
+                  key={exercise.exerciseKey}
                   exercise={exercise}
-                  exerciseIndex={index}
+                  onDelete={() => deleteExercise(exercise.exerciseKey)}
                 />
               );
             })}
