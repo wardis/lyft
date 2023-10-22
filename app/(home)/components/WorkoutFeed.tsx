@@ -1,18 +1,28 @@
 import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/card";
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { BiMedal, BiShareAlt } from "react-icons/bi";
+import { BiShareAlt } from "react-icons/bi";
 
 import { WorkoutSummary } from "@/components/ui/WorkoutSummary";
 
 const EXERCISES_PER_CARD = 3;
 
-type Props = { workouts: any[] };
+type Props = { workouts: any[]; user: User };
 
-export const WorkoutFeed = ({ workouts }: Props) => {
+export const WorkoutFeed = ({ workouts, user }: Props) => {
   return (
     <div>
+      <div className="mb-2">
+        <small>
+          {new Date().toLocaleDateString("en-GB", {
+            dateStyle: "medium",
+          })}
+        </small>
+        <p className=" text-lg">Hi, {user.user_metadata.full_name}</p>
+        <p>Good to see you here again! </p>
+      </div>
       {workouts.map((workout, index) => (
         <div key={index} className="py-2">
           <Card className="rounded-md">

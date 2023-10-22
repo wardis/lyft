@@ -36,7 +36,7 @@ const userRoutines = [
 export default function Workout() {
   return (
     <div>
-      <h1>Workout</h1>
+      <h1 className="text-xl">Workout</h1>
 
       <div className="mt-4">
         <h2 className="mb-2">Quick Start</h2>
@@ -58,27 +58,23 @@ export default function Workout() {
         </div>
       </div>
 
-      <div className="mt-4 mx-[-10px]">
-        <Accordion variant="light" isCompact>
-          <AccordionItem
-            title={<h2>{"My Routines (" + userRoutines.length + ")"}</h2>}
-            indicator="..."
-          >
-            {userRoutines.map((routine) => (
-              <div key={routine.id} className="mb-4 border rounded-lg p-4">
-                <div className="flex flex-col gap-2">
-                  <h3 className="font-bold">{routine.name}</h3>
-                  <p className="text-small py-0 line-clamp-2">
-                    {routine.description}
-                  </p>
-                  <div>
-                    <Button fullWidth>Start Routine</Button>
-                  </div>
+      <div className="mt-4">
+        <h2 className="mb-2">{"My Routines (" + userRoutines.length + ")"}</h2>
+        <div>
+          {userRoutines.map((routine) => (
+            <div key={routine.id} className="mb-4 border rounded-lg p-4">
+              <div className="flex flex-col gap-2">
+                <h3 className="font-bold">{routine.name}</h3>
+                <p className="text-small py-0 line-clamp-2">
+                  {routine.description}
+                </p>
+                <div>
+                  <Button fullWidth>Start Routine</Button>
                 </div>
               </div>
-            ))}
-          </AccordionItem>
-        </Accordion>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

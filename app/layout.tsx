@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site";
 
 import { Providers } from "./providers";
 import SupabaseProvider from "./supabase-provider";
+import { Link } from "@nextui-org/link";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +37,13 @@ export default function RootLayout({
                 <span className="text-default-600">
                   Made with love by&nbsp;
                 </span>
-                <p className="text-primary"> Lyft</p>
+                <Link
+                  isExternal
+                  href="https://www.instagram.com/wardisoulaimana"
+                  className="text-primary"
+                >
+                  Wardi
+                </Link>
               </footer>
             </div>
           </Providers>
