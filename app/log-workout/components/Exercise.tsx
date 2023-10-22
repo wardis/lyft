@@ -1,10 +1,11 @@
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 
 import { Avatar } from "@nextui-org/avatar";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Input } from "@nextui-org/input";
+import { SelectItem } from "@nextui-org/select";
 import {
   Table,
   TableBody,
@@ -13,14 +14,31 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table";
+import dynamic from "next/dynamic";
 import { Controller, useFormContext } from "react-hook-form";
 import { BiDotsVertical, BiDumbbell, BiPlus, BiTrash } from "react-icons/bi";
+import { CgTimer } from "react-icons/cg";
 import { MdDone } from "react-icons/md";
 
 import { Button } from "@/components/ui/Button";
 
-import RestTimer from "./RestTimer";
 import SelectSetType from "./SelectSetType";
+
+const Select = dynamic(() =>
+  import("@nextui-org/select").then((mod) => mod.Select)
+);
+
+const durationOptions = [
+  { value: "OFF", label: "off" },
+  ...Array.from(Array(24).keys()).map((i) => ({
+    value: (i + 1) * 5,
+    label: "" + (i + 1) * 5 + "s",
+  })),
+  ...Array.from(Array(12).keys()).map((i) => ({
+    value: 120 + (i + 1) * 15,
+    label: "" + 120 + (i + 1) * 15 + "s",
+  })),
+];
 
 export type ExerciseSet = {
   position: number;
@@ -168,11 +186,22 @@ export default function Exercise({ exercise, onDelete }: Props) {
         </Button>
       </div>
       <div className="grid grid-cols-10 gap-2">
-        <RestTimer
-          name={"exercises." + exercise.exerciseKey + ".restTimer"}
-          restDuration={restDuration}
-          setRestDuration={setRestDuration}
-        />
+        <Select
+          className="text-primary h-3 col-span-3"
+          startContent={<CgTimer size={24} />}
+          label="Rest timer"
+          placeholder="Duration"
+          selectedKeys={restDuration}
+          size="sm"
+          onSelectionChange={setRestDuration}
+          {...register("exercises." + exercise.exerciseKey + ".restTimer")}
+        >
+          {durationOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </Select>
         <Input
           size="sm"
           variant="flat"
