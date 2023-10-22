@@ -1,14 +1,16 @@
 import { BiMedal } from "react-icons/bi";
 
+import { humanize } from "@/utils/helpers";
+
 type Props = { duration: number; volume: number; records?: number };
 
 export const WorkoutSummary = ({ duration, volume, records }: Props) => {
   return (
-    <div className="grid grid-cols-4 w-full">
+    <div className="grid grid-cols-3 w-full">
       {duration ? (
         <div className="">
           <small>Time</small>
-          <p className="text-sm">{duration}min</p>
+          <p className="text-sm">{humanize(duration)}</p>
         </div>
       ) : null}
       {volume ? (

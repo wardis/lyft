@@ -1,3 +1,5 @@
+import humanizeDuration from "humanize-duration";
+
 export const getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
@@ -9,3 +11,17 @@ export const getURL = () => {
   url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
   return url;
 };
+
+const humanizer = humanizeDuration.humanizer({
+  language: "shortEn",
+  languages: {
+    shortEn: {
+      d: () => "d",
+      h: () => "h",
+      m: () => "min",
+      s: () => "s",
+      ms: () => "ms",
+    },
+  },
+});
+export const humanize = (duration: number) => humanizer(duration * 1000);

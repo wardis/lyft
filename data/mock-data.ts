@@ -1,6 +1,6 @@
 export const completedWorkout = {
   duration: 52,
-  volume: 8000,
+  volume: 6000,
   records: 3,
   exercises: [
     {
@@ -142,11 +142,17 @@ export const completedWorkout = {
   ],
 };
 
+const randomize = (workout) => ({
+  ...workout,
+  duration: Math.floor(workout.duration * Math.random() * 100),
+  volume: Math.floor(workout.volume * Math.random()),
+  records: Math.floor(workout.records * Math.random() + 1),
+});
+
 export const homeFeedWorkouts = [
-  completedWorkout,
-  completedWorkout,
-  completedWorkout,
-  completedWorkout,
-  completedWorkout,
-  completedWorkout,
+  randomize(completedWorkout),
+  randomize(completedWorkout),
+  randomize(completedWorkout),
+  randomize(completedWorkout),
+  randomize(completedWorkout),
 ];

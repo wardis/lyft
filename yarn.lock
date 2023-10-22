@@ -1847,6 +1847,11 @@
   resolved "http://localhost:4873/@types%2fflat/-/flat-5.0.3.tgz#1f8045859a7e0955acf2a50e8c2979899e7b1801"
   integrity sha512-uG/4x6EXYbq4VDsBJLNDHQAQmtRPg3x4tAXcBspxlnEknz8NiJxnHoxSiJKGNExiS00q4mJNvuEBgVA3jsDIdQ==
 
+"@types/humanize-duration@^3.27.2":
+  version "3.27.2"
+  resolved "http://localhost:4873/@types/humanize-duration/-/humanize-duration-3.27.2.tgz#b07c16ce606cf4d5839ac3bf06d0722dcdd425fe"
+  integrity sha512-KOGjfVAD8CHMgXL6z96f7eCNRFUENKa2BG87l7JsSg9ZA6lRFsipZ0faF4kKFqnzxirVgXmOnWqTLAKUog1h/g==
+
 "@types/json5@^0.0.29":
   version "0.0.29"
   resolved "http://localhost:4873/@types%2fjson5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
@@ -3084,6 +3089,11 @@ has@^1.0.3:
   version "1.0.4"
   resolved "http://localhost:4873/has/-/has-1.0.4.tgz#2eb2860e000011dae4f1406a86fe80e530fb2ec6"
   integrity sha512-qdSAmqLF6209RFj4VVItywPMbm3vWylknmB3nvNiUIs72xAimcM8nVYxYr7ncvZq5qzk9MKIZR8ijqD/1QuYjQ==
+
+humanize-duration@^3.30.0:
+  version "3.30.0"
+  resolved "http://localhost:4873/humanize-duration/-/humanize-duration-3.30.0.tgz#9be623d331116583ff90aeb6ccfdc2e79d6d7372"
+  integrity sha512-NxpT0fhQTFuMTLnuu1Xp+ozNpYirQnbV3NlOjEKBYlE3uvMRu3LDuq8EPc3gVXxVYnchQfqVM4/+T9iwHPLLeA==
 
 ignore@^5.2.0:
   version "5.2.4"
