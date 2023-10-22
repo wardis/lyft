@@ -160,11 +160,7 @@ export default function Exercise({ exercise, exerciseIndex }: Props) {
   return (
     <div className="flex-col gap-2 flex">
       <div className="flex items-center gap-2 justify-start">
-        <Avatar
-          size="sm"
-          src="/assets/dumbbell.svg"
-          style={{ padding: "4px" }}
-        />
+        <Avatar size="sm" src="/assets/dumbbell.svg" className="p-1" />
         <p className="text-primary flex-grow">{exercise.name}</p>
         <BiDotsVertical className="text-primary" size="24" />
       </div>

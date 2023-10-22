@@ -30,12 +30,14 @@ export default function NavbarClient({ user, userData }: Props) {
 
   return (
     <NextUINavbar
-      maxWidth="xl"
+      className="max-w-md mx-auto"
       position="sticky"
       onMenuOpenChange={setisMenuOpen}
       isMenuOpen={isMenuOpen}
     >
       <NavbarContent>
+        {user.email && <Avatar src={userData?.avatar_url ?? ""} />}
+
         <NavbarBrand>
           <NextLink href="/">
             <span className="font-bold">Lyft</span>
@@ -44,39 +46,19 @@ export default function NavbarClient({ user, userData }: Props) {
       </NavbarContent>
 
       <NavbarContent className="" justify="end">
-        {user ? (
-          <Avatar isBordered color="primary" src={userData?.avatar_url ?? ""} />
+        {user.email ? (
+          <>
+            <SignOutButton variant="light" />
+            <NextLink href="/workout">
+              <Button color="primary">Workout</Button>
+            </NextLink>
+          </>
         ) : (
           <NextLink href="/signin">
             <Button color="primary">Sign In</Button>
           </NextLink>
         )}
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        />
       </NavbarContent>
-
-      <NavbarMenu>
-        <div className="mx-4 mt-2 flex flex-col gap-2 items-end">
-          {user && (
-            <p className="self-start">
-              Hi {userData?.full_name ?? user.email}!
-            </p>
-          )}
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link color="foreground" href={item.href}>
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-          {user && (
-            <NavbarMenuItem>
-              <SignOutButton variant="light" color="primary" />
-            </NavbarMenuItem>
-          )}
-        </div>
-      </NavbarMenu>
     </NextUINavbar>
   );
 }

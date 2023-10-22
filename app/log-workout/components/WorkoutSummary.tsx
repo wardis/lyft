@@ -24,7 +24,7 @@ export default function WorkoutSummary({}: Props) {
       (exercise: WorkoutExercise) => exercise.sets
     ) || [];
   const totalSetCount = allSets.length;
-  const completedSets = allSets.filter((set: ExerciseSet) => set.isDone);
+  const completedSets = allSets.filter((set: ExerciseSet) => set?.isDone);
   const completedSetCount = completedSets.length;
   const workoutVolume = completedSets.reduce(
     (total: number, set: ExerciseSet) =>
