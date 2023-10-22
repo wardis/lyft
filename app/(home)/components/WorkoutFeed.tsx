@@ -20,8 +20,12 @@ export const WorkoutFeed = ({ workouts, user }: Props) => {
             dateStyle: "medium",
           })}
         </small>
-        <p className=" text-lg">Hi, {user.user_metadata.full_name}</p>
-        <p>Good to see you here again! </p>
+        <p>
+          {user.user_metadata.full_name
+            ? `Hi ${user.user_metadata.full_name}, good to see you again!`
+            : "Hi, good to see you again!"}
+        </p>
+        <p> </p>
       </div>
       {workouts.map((workout, index) => (
         <div key={index} className="py-2">
